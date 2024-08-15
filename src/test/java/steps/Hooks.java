@@ -35,8 +35,6 @@ public class Hooks {
 	public static String aux = null;
 	public static String auxTwo = null;
 	public static String auxThree = null;
-	public static String userToken = null;
-	public static String hubToken = null;
 
 	/**
 	 * Inicializa los componentes del WebDriver antes de cada prueba.
@@ -369,13 +367,10 @@ public class Hooks {
 			WebElement element = findClickableElement(locator);
 			element.click();
 
-			switch (System.getProperty("os.name")) {
-				case "Linux":
-					element.sendKeys(Keys.COMMAND,Keys.SHIFT + "a");
-					break;
-				case "Windows":
-					element.sendKeys(Keys.CONTROL + "a");
-					break;
+			if (System.getProperty("os.name").contains("Linux")) {
+				element.sendKeys(Keys.COMMAND,Keys.SHIFT + "a");
+			} else if (System.getProperty("os.name").contains("Windows")) {
+				element.sendKeys(Keys.CONTROL + "a");
 			}
 
 			element.sendKeys(Keys.BACK_SPACE);
@@ -1006,6 +1001,4 @@ public class Hooks {
 	public void refreshPage() {
 		driver.navigate().refresh();
 	}
-
-
 }
