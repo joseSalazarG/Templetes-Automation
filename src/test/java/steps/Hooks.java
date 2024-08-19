@@ -366,14 +366,7 @@ public class Hooks {
 		try {
 			WebElement element = findClickableElement(locator);
 			element.click();
-
-			if (System.getProperty("os.name").contains("Linux")) {
-				element.sendKeys(Keys.COMMAND,Keys.SHIFT + "a");
-			} else if (System.getProperty("os.name").contains("Windows")) {
-				element.sendKeys(Keys.CONTROL + "a");
-			}
-
-			element.sendKeys(Keys.BACK_SPACE);
+			element.sendKeys(Keys.CONTROL, "a", Keys.BACK_SPACE);
 		} catch (NoSuchElementException e) {
 			throw new NoSuchElementException("Elemento no encontrado: " + locator);
 		} catch (WebDriverException e) {
