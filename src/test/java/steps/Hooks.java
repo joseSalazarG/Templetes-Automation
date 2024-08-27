@@ -110,7 +110,11 @@ public class Hooks {
 	 * Cierra y limpia los recursos del WebDriver.
 	 */
 	private void closeDriverResources() {
-		closeBrowser();
+		try {
+			closeBrowser();
+		} catch (Exception e) {
+			System.err.println("Error al cerrar el navegador: " + e.getMessage());
+		}
 	}
 
 	/**
