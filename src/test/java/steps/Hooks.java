@@ -224,7 +224,7 @@ public class Hooks {
 	 * @throws NoSuchElementException          Si el elemento no se encuentra.
 	 * @throws ElementNotInteractableException Si el elemento no es interactuable.
 	 */
-	public void writeover(String locator, String textToWrite) {
+	public void writeOver(String locator, String textToWrite) {
 		try {
 			find(locator).sendKeys(textToWrite);
 		} catch (NoSuchElementException e) {
