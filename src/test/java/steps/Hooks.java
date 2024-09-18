@@ -704,6 +704,19 @@ public class Hooks {
 			throw new TimeoutException("El elemento sigue visible después del tiempo esperado: " + locator, e);
 		}
 	}
+		/**
+	 * Espera hasta que un elemento, identificado por un localizador XPath, sea clickable en la página.
+	 *
+	 * @param locator El localizador XPath del elemento a esperar que sea clickable.
+	 * @throws TimeoutException si el elemento no se volvio clickable después del tiempo definido de espera.
+	 */
+	public void waitForElementToBeClickable(String locator) {
+		try {
+			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(locator)));
+		} catch (TimeoutException e) {
+			throw new TimeoutException("El elemento no se volvio clickable después del tiempo esperado: " + locator, e);
+		}
+	}
 
 	public void touchMarginElement(String locator, String horizontal, String vertical) {
 		try {
