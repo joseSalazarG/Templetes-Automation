@@ -49,6 +49,11 @@ public class Hooks {
 	private static final String APP_ACTIVITY = "com.newfuturo.app.MainActivity";
 	private static final String APPIUM_SERVER_URL = "http://127.0.0.1:4723/";
 
+	//API Endpoints
+	public static final String urlToken = "https://xxxxxxx/hubapi/login";
+	public static final String credenciales = "{\"email\":\"xxxxx\",\"password\":\"xxxxxxx\"}";
+	public static final String authToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
 	/**
 	 * Configura el entorno antes de ejecutar las pruebas.
 	 * Crea las capacidades, inicializa el driver de Appium y registra un mensaje informativo.
@@ -818,6 +823,56 @@ public class Hooks {
 			driver.perform(List.of(tap));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+		/**
+	 * Obtiene el token de autenticación para realizar solicitudes en la aplicación.
+	 * @param baseUrl El endpoint a la api para obtener el token.
+	 * @param jsonCredenciales las credenciales para conectarse.
+	 * @param authorization token de autorizacion para acceder a la api.
+	 * @return el token de autenticación.
+	 */
+	public String getHubToken(String baseUrl, String jsonCredenciales ,String authorization ) {
+
+		RequestSpecification request = RestAssured.given();
+		request.header("Authorization", authorization);
+		request.contentType(ContentType.JSON);
+		request.body(jsonCredenciales);
+
+		Response response = request.post(baseUrl);
+		int statusCode = response.getStatusCode();
+		String cachedToken = null;
+
+		if (statusCode == 200) {
+			cachedToken = response.jsonPath().getString("data.token");
+			System.err.println(cachedToken);
+		}
+		return cachedToken;
+	}
+		/**
+	 * Busca la ultima solicitud en la aplicación segun la id del usuario  y devuelve su identificador.
+	 * @param user el numero de id del usuario.
+	 * @return El identificador del usuario.
+	 * @throws IllegalStateException Si no se encuentran usuarios en la respuesta.
+	 */
+	public String searchRequestId(String user) {
+		String url = "https://xxxxxxxxxxx/hubapi/members?search=";
+		String searchUrl = url + user;
+
+		hubToken = getHubToken(urlToken,credenciales, authToken);
+
+		RequestSpecification request = RestAssured.given();
+		request.header("Authorization", hubToken);
+		request.contentType(ContentType.JSON);
+
+		Response response = request.get(searchUrl);
+		List<String> userIds = response.jsonPath().getList("data.data._id");
+
+		if (!userIds.isEmpty()) {
+
+			return userIds.get(0);
+		} else {
+			throw new IllegalStateException("No se encontraron solicitudes en la respuesta.");
 		}
 	}
 }
