@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class LoginPage {
-
+    // ejemplos de xpath
     private final String InputLogin = "//input[@name='email']";
     private final String InputPassword = "//input[@name='password']";
     private final String btnSubmit = "//button[@type='submit']";
