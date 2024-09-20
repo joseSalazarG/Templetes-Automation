@@ -9,17 +9,17 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <selenium.version>4.20.0</selenium.version>
+        <selenium.version>4.24.0</selenium.version>
         <junit.version>5.10.0</junit.version>
-        <cucumber.version>7.15.0</cucumber.version>
-        <extentreports.version>1.10.1</extentreports.version>
+        <cucumber.version>7.18.0</cucumber.version>
+        <extentreports.version>1.14.0</extentreports.version>
         <json-simple.version>1.1.1</json-simple.version>
-        <log4j.version>2.13.3</log4j.version>
+        <log4j.version>2.21.0</log4j.version>
         <commons-logging.version>1.2</commons-logging.version>
-        <lombok.version>1.18.30</lombok.version>
+        <lombok.version>1.18.32</lombok.version>
         <annotations.version>RELEASE</annotations.version>
-        <webdrivermanager.version>5.7.0</webdrivermanager.version>
-        <restassured.version>5.3.0</restassured.version>
+        <webdrivermanager.version>5.9.0</webdrivermanager.version>
+        <restassured.version>5.4.0</restassured.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v124</artifactId>
+            <artifactId>selenium-devtools-v127</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 

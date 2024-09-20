@@ -10,6 +10,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -401,19 +402,22 @@ public class Hooks {
 	}
 
 	/**
-	 * Escribe texto en un elemento identificado por su locator.
+	 * Escribe texto en un elemento caracter por caracter identificado por su locator.
 	 * @param locator      El locator del elemento en el que se escribirá el texto.
 	 * @param textToWrite  El texto que se escribirá en el elemento. No debe ser nulo.
 	 * @throws NoSuchElementException          Si el elemento no se encuentra.
 	 * @throws ElementNotInteractableException Si el elemento no es interactuable.
 	 */
-	public void writeTwo(String locator, String textToWrite) {
+	public void writeFor(String locator, String textToWrite) {
 		validateLocator(locator);
 
 		try {
 			WebElement element = findClickableElement(locator);
 			element.clear();
-			element.sendKeys(textToWrite);
+
+			for (int i = 0; i < textToWrite.length(); i++) {
+				element.sendKeys(String.valueOf(textToWrite.charAt(i)));
+			}
 		} catch (NoSuchElementException e) {
 			throw new NoSuchElementException("Elemento no encontrado: " + locator);
 		} catch (ElementNotInteractableException e) {
@@ -437,25 +441,6 @@ public class Hooks {
 			js.executeScript(typeText);
 		} catch (WebDriverException e) {
 			throw new WebDriverException("Error al ejecutar el script de JavaScript", e);
-		}
-	}
-
-	/**
-	 * Utiliza la tecla de retroceso (BACK_SPACE) para borrar un carácter en el elemento especificado por el localizador.
-	 *
-	 * @param locator El localizador del elemento al que se enviará la tecla BACK_SPACE.
-	 * @throws NoSuchElementException si el elemento no se encuentra en el DOM.
-	 * @throws ElementNotInteractableException si el elemento no es interactuable.
-	 */
-	public void deleteBackspace(String locator) {
-		validateLocator(locator);
-
-		try {
-			findClickableElement(locator).sendKeys(Keys.BACK_SPACE);
-		} catch (NoSuchElementException e) {
-			throw new NoSuchElementException("Elemento no encontrado: " + locator);
-		} catch (ElementNotInteractableException e) {
-			throw new ElementNotInteractableException("El elemento no es interactuable: " + locator);
 		}
 	}
 
@@ -889,7 +874,7 @@ public class Hooks {
 		validateLocator(locator);
 
 		try {
-			driver.findElement(By.xpath(locator));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(locator)));
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
