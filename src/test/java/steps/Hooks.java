@@ -3,6 +3,7 @@ package steps;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.AutomationName;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.cucumber.java.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -13,7 +14,6 @@ import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -36,6 +36,7 @@ public class Hooks {
 	 * Declaración de variables estáticas y constantes.
 	 */
 	protected static AndroidDriver driver;
+	protected static AppiumDriverLocalService server;
 	protected static WebDriverWait wait;
 	protected static Actions action;
 	protected final static PointerInput FINGER = new PointerInput(TOUCH, "FINGER");
@@ -99,6 +100,10 @@ public class Hooks {
 	 */
 	private void initializeDriver(UiAutomator2Options options) {
 		try {
+			log.info("Iniciando el servidor de Appium");
+			server = AppiumDriverLocalService.buildDefaultService();
+			server.start();
+			server.clearOutPutStreams();
 			URL androidDriver = new URL(APPIUM_SERVER_URL);
 			driver = new AndroidDriver(androidDriver, options);
 			action = new Actions(driver);
@@ -118,6 +123,7 @@ public class Hooks {
 			captureScreenshotAndAttachToReport(scenario);
 		}
 		closeApp();
+		server.stop();
 	}
 
 	/**
