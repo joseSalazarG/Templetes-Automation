@@ -54,6 +54,7 @@ public class Hooks {
 	public static final String urlToken = "https://xxxxxxx/hubapi/login";
 	public static final String credenciales = "{\"email\":\"xxxxx\",\"password\":\"xxxxxxx\"}";
 	public static final String authToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+	public static String hubToken = null;
 
 	/**
 	 * Configura el entorno antes de ejecutar las pruebas.
@@ -553,6 +554,29 @@ public class Hooks {
 	}
 
 	/**
+	 * Metodo Sobrecargado
+	 *
+	 * Obtiene el valor del atributo pasado por parametro de un elemento.
+	 * @param locator El localizador del elemento.
+	 * @param attribute El nombre del atributo.
+	 * @return El valor del atributo.
+	 * @throws NoSuchElementException Si el elemento no tiene un atributo válido.
+	 */
+	public String textFromElementAttribute(String locator, String attribute) throws NoSuchElementException {
+		try {
+			String textAttribute = find(locator).getAttribute(attribute);
+			if (textAttribute != null && !textAttribute.isEmpty()) {
+				return textAttribute;
+			} else {
+				throw new NoSuchElementException("El elemento no tiene un atributo "+ attribute + " válido.");
+			}
+		} catch (NoSuchElementException e) {
+			System.out.println("Error al leer el atributo "+ attribute + " del elemento: " + e.getMessage());
+			throw new NoSuchElementException("El elemento no tiene un atributo "+ attribute + " válido.");
+		}
+	}
+
+	/**
 	 * Verifica si un elemento está habilitado.
 	 * @param locator El localizador del elemento.
 	 * @return true si el elemento está habilitado, false en caso contrario.
@@ -879,6 +903,117 @@ public class Hooks {
 			return userIds.get(0);
 		} else {
 			throw new IllegalStateException("No se encontraron solicitudes en la respuesta.");
+		}
+	}
+
+
+	/**
+	 * Busca la ultima solicitud en la aplicación segun la cedula del usuario  y devuelve su tipo.
+	 * @param user el numero de cedula del usuario.
+	 * @return El tipo de solicitud.
+	 * @throws IllegalStateException Si no se encuentra el tipo de las solicitudes en la respuesta.
+	 */
+	public String searchRequestChangeType(String user) {
+		String url = "https://xxxxxxxxxxx/api/dev/userstreamchange/list_get?search=";
+		String baseUrl = url + user;
+
+		hubToken = getHubToken(urlToken,credenciales, authToken);
+
+		RequestSpecification request = RestAssured.given();
+		request.header("Authorization", hubToken);
+		request.contentType(ContentType.JSON);
+
+		Response response = request.get(baseUrl);
+		List<String> solicitudChangeTypes = response.jsonPath().getList("data.data.changeType");
+
+		if (!solicitudChangeTypes.isEmpty()) {
+
+			return solicitudChangeTypes.get(0);
+		} else {
+			throw new IllegalStateException("No se encontraron solicitudes en la respuesta.");
+		}
+	}
+
+	/**
+	 * Cambia el estado de una solicitud en la aplicación segun la cedula del usuario  y su tipo.
+	 * @param user el numero de cedula del usuario.
+	 * @param status el estado al cual se quiere cambiar la solicitud nueva.
+	 * @throws IllegalStateException Si no se encuentra el tipo de las solicitudes en la respuesta.
+	 */
+	public void putChangeStatus(String user, String status) {
+		String baseUrl = "https://xxxxxxxxxxx/api/dev/userstreamchange/status";
+		String id = searchRequestId(user);
+		String changeType = searchRequestChangeType(user);
+		String json= null;
+
+		if(Objects.equals(changeType, "NEW")){
+			json = "{ \"_id\": \"" + id + "\",\"status\": \"" + status + "\",\"statusReason\": \"Motivo de prueba\" }";
+
+		} else if (Objects.equals(changeType, "DELETE")) {
+			json = "{ \"_id\": \"" + id + "\",\"status\": \"ACEPTADO\",\"statusReason\": \"Motivo de prueba\" }";
+		}
+
+		hubToken = getHubToken(urlToken,credenciales, authToken);
+
+		RequestSpecification request = RestAssured.given();
+		request.header("Authorization", hubToken);
+		request.contentType(ContentType.JSON);
+		request.body(json);
+
+		Response response = request.put(baseUrl);
+		int statusCode = response.getStatusCode();
+
+
+		if (statusCode == 200) {
+			//cachedToken = response.jsonPath().getString("data");
+
+		} else {
+			throw new IllegalStateException("No se encontraron solicitudes que modificar en la respuesta.");
+		}
+	}
+
+	//Busca un reporte para su posterior eliminacion
+	public String searchReporte(String idreporte) {
+		String url = "https://xxxxxxxxxxx/api/dev/report/list?search=";
+		String baseUrl = url + idreporte;
+
+		hubToken = getHubToken(urlToken,credenciales, authToken);
+
+		RequestSpecification request = RestAssured.given();
+		request.header("Authorization", hubToken);
+		request.contentType(ContentType.JSON);
+
+		Response response = request.get(baseUrl);
+		List<String> solicitudId = response.jsonPath().getList("data.data._id");
+
+		if (!solicitudId.isEmpty()) {
+			return solicitudId.get(0);
+		} else {
+			throw new IllegalStateException("No se encontro la id del reporte");
+		}
+	}
+
+	//Elimino el reporte
+	public void eliminarReporteHub(String idReporte) {
+		String baseUrl = "https://xxxxxxxxxxx/api/dev/report/";
+		String id = null;
+		String req = null;
+
+		id = searchReporte(idReporte);
+		req = baseUrl + id + "/remove";
+
+		hubToken = getHubToken(urlToken,credenciales, authToken);
+
+		RequestSpecification request = RestAssured.given();
+		request.header("Authorization", hubToken);
+
+		Response response = request.delete(req);
+		int statusCode = response.getStatusCode();
+
+		if (statusCode == 200) {
+			log.info("Fue eliminado el reporte");
+		} else {
+			throw new IllegalStateException("No se pudo aprobar eliminar el reporte");
 		}
 	}
 }
