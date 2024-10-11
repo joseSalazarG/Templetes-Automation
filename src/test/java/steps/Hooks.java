@@ -4,6 +4,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
 import io.cucumber.java.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -18,9 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
-
+import io.cucumber.java.Scenario;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -36,18 +38,18 @@ public class Hooks {
 	 * Declaración de variables estáticas y constantes.
 	 */
 	protected static AndroidDriver driver;
-	protected static AppiumDriverLocalService server;
+	protected static AppiumDriverLocalService appiumServer;
 	protected static WebDriverWait wait;
 	protected static Actions action;
 	protected final static PointerInput FINGER = new PointerInput(TOUCH, "FINGER");
 	public static String aux = null;
 	public static String auxTwo = null;
-
 	public static int auxint = 0;
 	public static int auxTwoint = 0;
 	private static final String PLATFORM_NAME = "Android";
-	private static final String APP_PACKAGE = "com.newfuturo.app.dev";
-	private static final String APP_ACTIVITY = "com.newfuturo.app.MainActivity";
+	private static final String APP_PACKAGE = "com.example.demo";
+	private static final String APP_ACTIVITY = "com.example.exampleActivity";
+	private static final String APP_PATH = "src/test/resources/app/appName.apk";
 	private static final String APPIUM_SERVER_URL = "http://127.0.0.1:4723/";
 
 	//API Endpoints
@@ -62,9 +64,24 @@ public class Hooks {
 	 */
 	@Before
 	public void setUp() {
+		startAppiumServer();
 		UiAutomator2Options options = createCapabilities(true);
 		initializeDriver(options);
-		log.info("Iniciando la aplicación Futuro");
+		log.info("Iniciando la aplicación");
+	}
+
+	/**
+	 * Inicializa el servidor de Appium.
+	 */
+	private void startAppiumServer() {
+		try {
+			log.info("Iniciando el servidor de Appium");
+			appiumServer = AppiumDriverLocalService.buildDefaultService();
+			appiumServer.start();
+			appiumServer.clearOutPutStreams();
+		} catch (AppiumServerHasNotBeenStartedLocallyException e) {
+			throw new RuntimeException("Error al iniciar el servidor de Appium", e);
+		}
 	}
 
 	/**
@@ -78,6 +95,8 @@ public class Hooks {
 		options.setAutomationName(AutomationName.ANDROID_UIAUTOMATOR2);
 		options.setAppPackage(APP_PACKAGE);
 		options.setAppActivity(APP_ACTIVITY);
+		options.setNoReset(false);
+		options.setApp(String.valueOf(Paths.get(APP_PATH).toAbsolutePath()));
 		options.setAutoGrantPermissions(autoGrantPermissions);
 
 		return options;
@@ -96,21 +115,17 @@ public class Hooks {
 	}
 
 	/**
-	 * Inicializa el driver de Appium con las capacidades proporcionadas.
+	 * Inicializa el servidor y driver de Appium con las capacidades proporcionadas.
 	 * @param options Las capacidades de la aplicación.
 	 */
 	private void initializeDriver(UiAutomator2Options options) {
 		try {
-			log.info("Iniciando el servidor de Appium");
-			server = AppiumDriverLocalService.buildDefaultService();
-			server.start();
-			server.clearOutPutStreams();
+			log.info("Iniciando el driver de Appium");
 			URL androidDriver = new URL(APPIUM_SERVER_URL);
 			driver = new AndroidDriver(androidDriver, options);
 			action = new Actions(driver);
 		} catch (MalformedURLException e) {
-			log.error("Error al iniciar la aplicación: " + e.getMessage());
-			throw new RuntimeException("Error al iniciar la aplicación", e);
+			throw new RuntimeException("Error al iniciar el driver", e);
 		}
 	}
 
@@ -124,7 +139,6 @@ public class Hooks {
 			captureScreenshotAndAttachToReport(scenario);
 		}
 		closeApp();
-		server.stop();
 	}
 
 	/**
@@ -132,8 +146,12 @@ public class Hooks {
 	 * @param scenario El escenario de prueba.
 	 */
 	private void captureScreenshotAndAttachToReport(Scenario scenario) {
-		byte[] screenshot = driver.getScreenshotAs(OutputType.BYTES);
-		scenario.attach(screenshot, "files/png", "El escenario falló, consulte la imagen adjunta.");
+		try {
+			byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+			scenario.attach(screenshot, "image/png", "El escenario falló, consulte la imagen adjunta.");
+		} catch (Exception e) {
+			log.error("Error al capturar la pantalla: {}", e.getMessage());
+		}
 	}
 
 	/**
@@ -146,6 +164,8 @@ public class Hooks {
 				driver = null;
 			} catch (WebDriverException e) {
 				throw new RuntimeException("Error al cerrar la aplicación: " + e.getMessage(), e);
+			} finally {
+				appiumServer.stop();
 			}
 		}
 	}
@@ -710,7 +730,7 @@ public class Hooks {
 	public static String generateRandomNumber(int n) {
 		Random random = new Random();
 		int numeroAleatorio = random.nextInt(n);
-        return String.format("%06d", numeroAleatorio);
+		return String.format("%06d", numeroAleatorio);
 	}
 	/**
 	 * Espera hasta que un elemento, identificado por un localizador XPath, esté visible en la página.
@@ -739,7 +759,7 @@ public class Hooks {
 			throw new TimeoutException("El elemento sigue visible después del tiempo esperado: " + locator, e);
 		}
 	}
-		/**
+	/**
 	 * Espera hasta que un elemento, identificado por un localizador XPath, sea clickable en la página.
 	 *
 	 * @param locator El localizador XPath del elemento a esperar que sea clickable.
@@ -855,7 +875,7 @@ public class Hooks {
 			e.printStackTrace();
 		}
 	}
-		/**
+	/**
 	 * Obtiene el token de autenticación para realizar solicitudes en la aplicación.
 	 * @param baseUrl El endpoint a la api para obtener el token.
 	 * @param jsonCredenciales las credenciales para conectarse.
@@ -879,7 +899,7 @@ public class Hooks {
 		}
 		return cachedToken;
 	}
-		/**
+	/**
 	 * Busca la ultima solicitud en la aplicación segun la id del usuario  y devuelve su identificador.
 	 * @param user el numero de id del usuario.
 	 * @return El identificador del usuario.
