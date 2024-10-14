@@ -10,8 +10,8 @@ public class LoginSteps {
 
     LoginLogic loginLogic = new LoginLogic();
 
-    @Given("Inicio sesion en Futuro")
-    public void inicioSesionEnFuturo() {
-        loginLogic.loginFuturo();
+    @Given("Inicio sesion")
+    public void inicioSesion() {
+        loginLogic.login();
     }
 }

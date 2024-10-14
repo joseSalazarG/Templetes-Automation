@@ -12,7 +12,7 @@ public class LoginLogic extends Hooks {
     LoginPage loginPage = new LoginPage();
     private static final Logger log = LogManager.getLogger(LoginLogic.class);
 
-    public void loginFuturo() {
+    public void login() {
         String step = "Inicio sesion";
         log.info(step);
 
