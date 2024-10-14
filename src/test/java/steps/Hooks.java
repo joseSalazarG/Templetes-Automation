@@ -876,7 +876,7 @@ public class Hooks {
 		try {
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(locator)));
 			return true;
-		} catch (NoSuchElementException e) {
+		} catch (NoSuchElementException | TimeoutException e) {
 			return false;
 		}
 	}
