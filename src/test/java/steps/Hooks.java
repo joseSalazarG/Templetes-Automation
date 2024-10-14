@@ -5,7 +5,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.log4j.Log4j2;
-import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -302,7 +301,7 @@ public class Hooks {
 	 * @param locator El localizador XPath del elemento a hacer clic.
 	 * @throws NoSuchElementException si el elemento especificado por el localizador no se encuentra.
 	 *        Indica que no se pudo encontrar un elemento con el localizador proporcionado.
-	 * @throws Exception para capturar y manejar cualquier otra excepción inesperada que pueda ocurrir durante la acción.
+	 * @throws WebDriverException para capturar y manejar cualquier otra excepción inesperada que pueda ocurrir durante la acción.
 	 */
 	public void clickElementActions(String locator) {
 		validateLocator(locator);
@@ -311,9 +310,9 @@ public class Hooks {
 			WebElement targetElement = findClickableElement(locator);
 			action.moveToElement(targetElement).click().perform();
 		} catch (NoSuchElementException e) {
-			System.err.println("Excepción: El elemento no fue encontrado. Detalles: " + e.getMessage());
+			throw new NoSuchElementException("Elemento no encontrado: " + locator);
 		} catch (Exception e) {
-			System.err.println("Excepción no esperada. Detalles: " + e.getMessage());
+			throw new WebDriverException("Error al hacer clic en el elemento: " + locator, e);
 		}
 	}
 
