@@ -11,8 +11,8 @@ public class LoginSteps {
     LoginLogic loginLogic = new LoginLogic();
 
     @Given("Navego a la pagina web")
-    public void navegoPaginaWebAmyr() {
-        loginLogic.navegoPaginaWebAmyr();
+    public void navegoPaginaWeb() {
+        loginLogic.navegoPaginaWeb();
     }
 
 }

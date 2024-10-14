@@ -124,7 +124,6 @@ public class Hooks {
 	private static void closeBrowser() {
 		if (driver != null) {
 			try {
-				driver.close();
 				driver.quit();
 				driver = null;
 			} catch (WebDriverException e) {
@@ -173,6 +172,14 @@ public class Hooks {
 		} catch (WebDriverException e) {
 			throw new WebDriverException("Error al navegar a la URL: " + url, e);
 		}
+	}
+
+	/**
+	 * Refresca la página actual en el navegador.
+	 *
+	 */
+	public void refreshPage() {
+		driver.navigate().refresh();
 	}
 
 	/**
@@ -974,13 +981,5 @@ public class Hooks {
 		} catch (Exception e) {
 			throw new NoSuchElementException("No se encontró ninguna alerta en el tiempo de espera especificado.");
 		}
-	}
-
-	/**
-	 * Refresca la página actual en el navegador.
-	 *
-	 */
-	public void refreshPage() {
-		driver.navigate().refresh();
 	}
 }

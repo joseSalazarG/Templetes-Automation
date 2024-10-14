@@ -13,8 +13,8 @@ public class LoginLogic extends Hooks {
     LoginPage loginPage = new LoginPage();
     private static final Logger log = LogManager.getLogger(LoginLogic.class);
 
-    public void navegoPaginaWebAmyr() {
-        String step = "Navego a la pagina web de Amyr";
+    public void navegoPaginaWeb() {
+        String step = "Navego a la pagina web";
         log.info(step);
 
         navigateToUrl(UrlConstant.DEV);

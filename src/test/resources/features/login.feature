@@ -2,7 +2,7 @@
 Feature: Login en la pagina web de Nombre
 
   Background:
-    Given Navego a la pagina web de Nombre
+    Given Navego a la pagina web
 
   #@Login
   #@Login_001
