@@ -49,7 +49,7 @@ public class Hooks {
 	private static final String PLATFORM_NAME = "Android";
 	private static final String APP_PACKAGE = "com.example.demo";
 	private static final String APP_ACTIVITY = "com.example.exampleActivity";
-	private static final String APP_PATH = "src/test/resources/app/appName.apk";
+	private static final String APP_PATH = "src/test/resources/appName.apk";
 	private static final String APPIUM_SERVER_URL = "http://127.0.0.1:4723/";
 
 	/**
