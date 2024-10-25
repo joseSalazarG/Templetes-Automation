@@ -73,6 +73,7 @@ public class Hooks {
 			appiumServer = AppiumDriverLocalService.buildDefaultService();
 			appiumServer.start();
 			appiumServer.clearOutPutStreams();
+			addEmergencyShutdown();
 		} catch (AppiumServerHasNotBeenStartedLocallyException e) {
 			throw new RuntimeException("Error al iniciar el servidor de Appium", e);
 		}
@@ -133,6 +134,18 @@ public class Hooks {
 			captureScreenshotAndAttachToReport(scenario);
 		}
 		closeApp();
+	}
+
+	/**
+	 * Agrega un cierre de emergencia para detener el servidor de Appium al finalizar las pruebas.
+	 */
+	private void addEmergencyShutdown() {
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			if (appiumServer != null && appiumServer.isRunning()) {
+				log.info("Deteniendo de emergencia el servidor de Appium");
+				appiumServer.stop();
+			}
+		}));
 	}
 
 	/**
