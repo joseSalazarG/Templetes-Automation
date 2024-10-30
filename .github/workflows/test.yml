@@ -43,14 +43,14 @@ jobs:
 
       # Sube el archivo ZIP como un artefacto del workflow
       - name: Upload Extent Report ZIP
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: extent-report-zip
           path: reporte.zip
 
       # Envia un email con el reporte adjunto
       - name: Send email with zipped report
-        uses: dawidd6/action-send-mail@v3.10.0
+        uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
