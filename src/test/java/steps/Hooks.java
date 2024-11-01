@@ -761,7 +761,6 @@ public class Hooks {
 		}
 	}
 
-
 	public void touchMarginElement(String locator, String horizontal, String vertical) {
 		try {
 			WebElement element = driver.findElement(By.xpath(locator));
@@ -774,30 +773,20 @@ public class Hooks {
 			int y = 0;
 
 			//Eje Horizontal
-			switch (horizontal) {
-				case "RIGHT":
-					x = location.getX() + width;
-					break;
-				case "LEFT":
-					x = location.getX();
-					break;
-				case "CENTER":
-					x = location.getX() + width / 2;
-					break;
-			}
+			x = switch (horizontal) {
+				case "RIGHT" -> location.getX() + width;
+				case "LEFT" -> location.getX();
+				case "CENTER" -> location.getX() + width / 2;
+				default -> x;
+			};
 
 			//Eje Vertical
-			switch (vertical) {
-				case "TOP":
-					y = location.getY();
-					break;
-				case "BOTTOM":
-					y = location.getY() + height;
-					break;
-				case "CENTER":
-					y = location.getY() + height / 2;
-					break;
-			}
+			y = switch (vertical) {
+				case "TOP" -> location.getY();
+				case "BOTTOM" -> location.getY() + height;
+				case "CENTER" -> location.getY() + height / 2;
+				default -> y;
+			};
 
 			PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "FINGER");
 			Sequence tap = new Sequence(finger, 1);
@@ -835,30 +824,20 @@ public class Hooks {
 			int y = 0;
 
 			//Eje Horizontal
-			switch (horizontal) {
-				case "RIGHT":
-					x = location.getX() + width + marginx;
-					break;
-				case "LEFT":
-					x = location.getX() + marginx;
-					break;
-				case "CENTER":
-					x = location.getX() + width / 2 + marginx;
-					break;
-			}
+			x = switch (horizontal) {
+				case "RIGHT" -> location.getX() + width + marginx;
+				case "LEFT" -> location.getX() + marginx;
+				case "CENTER" -> location.getX() + width / 2 + marginx;
+				default -> x;
+			};
 
 			//Eje Vertical
-			switch (vertical) {
-				case "TOP":
-					y = location.getY() + marginy;
-					break;
-				case "BOTTOM":
-					y = location.getY() + height + marginy;
-					break;
-				case "CENTER":
-					y = location.getY() + height / 2 + marginy;
-					break;
-			}
+			y = switch (vertical) {
+				case "TOP" -> location.getY() + marginy;
+				case "BOTTOM" -> location.getY() + height + marginy;
+				case "CENTER" -> location.getY() + height / 2 + marginy;
+				default -> y;
+			};
 
 			PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "FINGER");
 			Sequence tap = new Sequence(finger, 1);
