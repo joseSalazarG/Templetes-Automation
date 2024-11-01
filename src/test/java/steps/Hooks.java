@@ -6,8 +6,6 @@ import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServerHasNotBeenStartedLocallyException;
 import io.cucumber.java.*;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -22,10 +20,6 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
-import io.cucumber.java.Scenario;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-
 import static java.time.Duration.ofMillis;
 import static org.openqa.selenium.interactions.PointerInput.Kind.TOUCH;
 import static org.openqa.selenium.interactions.PointerInput.MouseButton.LEFT;
@@ -33,7 +27,6 @@ import static org.openqa.selenium.interactions.PointerInput.Origin.viewport;
 
 @Log4j2
 public class Hooks {
-
 	/**
 	 * Declaración de variables estáticas y constantes.
 	 */
@@ -47,27 +40,16 @@ public class Hooks {
 	public static int auxint = 0;
 	public static int auxTwoint = 0;
 	private static final String PLATFORM_NAME = "Android";
-	private static final String APP_PACKAGE = "com.example.demo";
-	private static final String APP_ACTIVITY = "com.example.exampleActivity";
-	private static final String APP_PATH = "src/test/resources/appName.apk";
+	private static final String APP_PACKAGE = "com.example.poke_app";
+	private static final String APP_ACTIVITY = ".MainActivity";
+	private static final String APP_PATH = "src/test/resources/app/app-release.apk";
 	private static final String APPIUM_SERVER_URL = "http://127.0.0.1:4723/";
-
-	/**
-	 * Configura el entorno antes de ejecutar las pruebas.
-	 * Crea las capacidades, inicializa el driver de Appium y registra un mensaje informativo.
-	 */
-	@Before
-	public void setUp() {
-		startAppiumServer();
-		UiAutomator2Options options = createCapabilities(true);
-		initializeDriver(options);
-		log.info("Iniciando la aplicación");
-	}
 
 	/**
 	 * Inicializa el servidor de Appium.
 	 */
-	private void startAppiumServer() {
+	@BeforeAll
+	public static void startAppiumServer() {
 		try {
 			log.info("Iniciando el servidor de Appium");
 			appiumServer = AppiumDriverLocalService.buildDefaultService();
@@ -77,6 +59,17 @@ public class Hooks {
 		} catch (AppiumServerHasNotBeenStartedLocallyException e) {
 			throw new RuntimeException("Error al iniciar el servidor de Appium", e);
 		}
+	}
+
+	/**
+	 * Configura el entorno antes de ejecutar las pruebas.
+	 * Crea las capacidades, inicializa el driver de Appium y registra un mensaje informativo.
+	 */
+	@Before
+	public void setUp() {
+		UiAutomator2Options options = createCapabilities(true);
+		initializeDriver(options);
+		log.info("Iniciando la aplicación");
 	}
 
 	/**
@@ -137,9 +130,17 @@ public class Hooks {
 	}
 
 	/**
+	 * Detiene el servidor de Appium al finalizar las pruebas.
+	 */
+	@AfterAll
+	public static void stopAppiumServer() {
+		appiumServer.stop();
+	}
+
+	/**
 	 * Agrega un cierre de emergencia para detener el servidor de Appium al finalizar las pruebas.
 	 */
-	private void addEmergencyShutdown() {
+	private static void addEmergencyShutdown() {
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			if (appiumServer != null && appiumServer.isRunning()) {
 				log.info("Deteniendo de emergencia el servidor de Appium");
@@ -171,8 +172,6 @@ public class Hooks {
 				driver = null;
 			} catch (WebDriverException e) {
 				throw new RuntimeException("Error al cerrar la aplicación: " + e.getMessage(), e);
-			} finally {
-				appiumServer.stop();
 			}
 		}
 	}
@@ -312,7 +311,7 @@ public class Hooks {
 			File localFile = new File(localFileName);
 			driver.pushFile(remotePath, localFile);
 		} catch (IOException e) {
-			log.error("Error al cargar el archivo: " + e.getMessage());
+			log.error("Error al cargar el archivo: {}", e.getMessage());
 			throw new RuntimeException(e);
 		}
 	}
@@ -719,26 +718,7 @@ public class Hooks {
 			System.out.println("Error al hacer clic y mantener presionado el elemento: " + e.getMessage());
 		}
 	}
-	/**
-	 * Genera un String Random
-	 */
-	public static String generateRandomString(int lenght) {
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		Random random = new Random();
-		StringBuilder stringBuilder = new StringBuilder(lenght);
 
-		for (int i = 0; i < lenght; i++) {
-			int index = random.nextInt(characters.length());
-			stringBuilder.append(characters.charAt(index));
-		}
-
-		return stringBuilder.toString();
-	}
-	public static String generateRandomNumber(int n) {
-		Random random = new Random();
-		int numeroAleatorio = random.nextInt(n);
-		return String.format("%06d", numeroAleatorio);
-	}
 	/**
 	 * Espera hasta que un elemento, identificado por un localizador XPath, esté visible en la página.
 	 *
@@ -766,6 +746,7 @@ public class Hooks {
 			throw new TimeoutException("El elemento sigue visible después del tiempo esperado: " + locator, e);
 		}
 	}
+
 	/**
 	 * Espera hasta que un elemento, identificado por un localizador XPath, sea clickable en la página.
 	 *
@@ -780,6 +761,7 @@ public class Hooks {
 		}
 	}
 
+
 	public void touchMarginElement(String locator, String horizontal, String vertical) {
 		try {
 			WebElement element = driver.findElement(By.xpath(locator));
@@ -792,25 +774,29 @@ public class Hooks {
 			int y = 0;
 
 			//Eje Horizontal
-			if(horizontal.equals("RIGHT")){ //derecha
-				x = location.getX() + width;
-			}
-			if(horizontal.equals("LEFT")){ //izquierda
-				x = location.getX();
-			}
-			if(horizontal.equals("CENTER")){ //centro x
-				x = location.getX() + width / 2;
+			switch (horizontal) {
+				case "RIGHT":
+					x = location.getX() + width;
+					break;
+				case "LEFT":
+					x = location.getX();
+					break;
+				case "CENTER":
+					x = location.getX() + width / 2;
+					break;
 			}
 
 			//Eje Vertical
-			if(vertical.equals("TOP")){ //arriba
-				y = location.getY();
-			}
-			if(vertical.equals("BOTTOM")){ //abajo
-				y = location.getY() + height;
-			}
-			if(vertical.equals("CENTER")){//centro
-				y = location.getY() + height / 2;
+			switch (vertical) {
+				case "TOP":
+					y = location.getY();
+					break;
+				case "BOTTOM":
+					y = location.getY() + height;
+					break;
+				case "CENTER":
+					y = location.getY() + height / 2;
+					break;
 			}
 
 			PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "FINGER");
@@ -826,6 +812,7 @@ public class Hooks {
 			e.printStackTrace();
 		}
 	}
+
 	/** Metodo Sobrecargado
 	 *
 	 * Toque en los bordes de un objeto * Medida de holgura + o - con respecto al borde
@@ -848,25 +835,29 @@ public class Hooks {
 			int y = 0;
 
 			//Eje Horizontal
-			if(horizontal.equals("RIGHT")){ //derecha
-				x = (location.getX() + width) + marginx;
-			}
-			if(horizontal.equals("LEFT")){ //izquierda
-				x = (location.getX()) + marginx;
-			}
-			if(horizontal.equals("CENTER")){ //centro x
-				x = (location.getX() + width / 2) + marginx;
+			switch (horizontal) {
+				case "RIGHT":
+					x = location.getX() + width + marginx;
+					break;
+				case "LEFT":
+					x = location.getX() + marginx;
+					break;
+				case "CENTER":
+					x = location.getX() + width / 2 + marginx;
+					break;
 			}
 
 			//Eje Vertical
-			if(vertical.equals("TOP")){ //arriba
-				y = (location.getY()) + marginy;
-			}
-			if(vertical.equals("BOTTOM")){ //abajo
-				y = (location.getY() + height) + marginy;
-			}
-			if(vertical.equals("CENTER")){//centro
-				y = (location.getY() + height / 2) + marginy;
+			switch (vertical) {
+				case "TOP":
+					y = location.getY() + marginy;
+					break;
+				case "BOTTOM":
+					y = location.getY() + height + marginy;
+					break;
+				case "CENTER":
+					y = location.getY() + height / 2 + marginy;
+					break;
 			}
 
 			PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "FINGER");
@@ -883,3 +874,4 @@ public class Hooks {
 		}
 	}
 }
+
