@@ -84,7 +84,7 @@ public class Hooks {
 		options.setAppPackage(APP_PACKAGE);
 		options.setAppActivity(APP_ACTIVITY);
 		options.setNoReset(false);
-		options.setApp(String.valueOf(Paths.get(APP_PATH).toAbsolutePath()));
+		//options.setApp(String.valueOf(Paths.get(APP_PATH).toAbsolutePath()));
 		options.setAutoGrantPermissions(autoGrantPermissions);
 
 		return options;
@@ -112,6 +112,7 @@ public class Hooks {
 			URL androidDriver = new URL(APPIUM_SERVER_URL);
 			driver = new AndroidDriver(androidDriver, options);
 			action = new Actions(driver);
+			wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		} catch (MalformedURLException e) {
 			throw new RuntimeException("Error al iniciar el driver", e);
 		}
@@ -184,7 +185,6 @@ public class Hooks {
 	 */
 	private WebElement find(String locator) {
 		try {
-			wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 			return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
 		} catch (TimeoutException e) {
 			throw new NoSuchElementException("Elemento no encontrado o no visible: " + locator);
@@ -199,7 +199,6 @@ public class Hooks {
 	 */
 	private List<WebElement> finds(String locator) {
 		try {
-			wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 			return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(locator)));
 		} catch (TimeoutException e) {
 			throw new NoSuchElementException("Elementos no encontrados o no visibles: " + locator);
@@ -617,6 +616,21 @@ public class Hooks {
 	}
 
 	/**
+	 * Verifica si existe un elemento identificado por su localizador XPath.
+	 *
+	 * @param locator El localizador XPath del elemento a verificar.
+	 * @return true si el elemento existe, false de lo contrario.
+	 */
+	public boolean existsElement(String locator) {
+		try {
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(locator)));
+			return true;
+		} catch (NoSuchElementException | TimeoutException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Verifica si un elemento está visible en la página.
 	 * @param locator El localizador del elemento.
 	 * @return true si el elemento está visible, false en caso contrario.
@@ -852,5 +866,28 @@ public class Hooks {
 			e.printStackTrace();
 		}
 	}
-}
 
+	/**
+	 * Genera un String Random
+	 */
+	public static String generateRandomString(int lenght) {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		Random random = new Random();
+		StringBuilder stringBuilder = new StringBuilder(lenght);
+		for (int i = 0; i < lenght; i++) {
+			int index = random.nextInt(characters.length());
+			stringBuilder.append(characters.charAt(index));
+		}
+
+		return stringBuilder.toString();
+	}
+
+	/**
+	 * Genera un número aleatorio en forma de cadena.
+	 */
+	public static String generateRandomNumber(int n) {
+		Random random = new Random();
+		int numeroAleatorio = random.nextInt(n);
+		return String.format("%06d", numeroAleatorio);
+	}
+}
