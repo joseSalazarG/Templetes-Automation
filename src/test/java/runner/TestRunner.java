@@ -13,10 +13,10 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = { "src/test/resources/features" },
         glue = { "steps" },
-        plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:", "json:target/cucumber-reports.json" },
+        plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm", "json:target/cucumber-reports.json" },
         monochrome = true,
         snippets = CucumberOptions.SnippetType.CAMELCASE,
-        tags = "@login"
+        tags = "@Login"
 )
 
 public class TestRunner {
