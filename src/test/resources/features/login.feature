@@ -1,10 +1,10 @@
 @allure.label.layer:web
 @allure.label.owner:Jose_Salazar
 @Templete
-Feature: Login en la pagina web de Amyr
+Feature: Login en la pagina web de Nombre
 
   Background:
-    Given Navego a la pagina web de Amyr
+    Given Navego a la pagina web
 
   @critical
   @Login @Login_001
