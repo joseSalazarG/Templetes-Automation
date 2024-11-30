@@ -9,24 +9,27 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <selenium.version>4.24.0</selenium.version>
-        <junit.version>5.10.0</junit.version>
-        <cucumber.version>7.20.1</cucumber.version>
-        <json-simple.version>1.1.1</json-simple.version>
-        <log4j.version>2.21.0</log4j.version>
-        <commons-logging.version>1.2</commons-logging.version>
-        <lombok.version>1.18.32</lombok.version>
-        <annotations.version>RELEASE</annotations.version>
-        <webdrivermanager.version>5.9.0</webdrivermanager.version>
-        <restassured.version>5.4.0</restassured.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <allure.version>2.29.0</allure.version>
-        <aspectj.version>1.9.22</aspectj.version>
+        <selenium.version>4.27.0</selenium.version> <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <junit.version>5.10.0</junit.version> <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <allure-generator.version>2.32.0</allure-generator.version> <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-generator -->
+        <cucumber.version>7.20.1</cucumber.version> <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+        <json-simple.version>1.1.1</json-simple.version> <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+        <slf4j-simple.version>2.0.16</slf4j-simple.version> <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <log4j-core.version>2.21.0</log4j-core.version> <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <log4j-api.version>2.21.0</log4j-api.version> <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <commons-logging.version>1.2</commons-logging.version> <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+        <lombok.version>1.18.32</lombok.version> <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <annotations.version>RELEASE</annotations.version> <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+        <webdrivermanager.version>5.9.0</webdrivermanager.version> <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+        <restassured.version>5.4.0</restassured.version> <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version> <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version> <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- https://maven.apache.org/general.html#encoding-warning -->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> <!-- https://maven.apache.org/general.html#encoding-warning -->
+        <maven.compiler.source>17</maven.compiler.source> <!-- https://maven.apache.org/plugins/maven-compiler-plugin/ -->
+        <maven.compiler.target>17</maven.compiler.target> <!-- https://maven.apache.org/plugins/maven-compiler-plugin/ -->
+        <allure.version>2.29.0</allure.version> <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-bom -->
+        <aspectj.version>1.9.22</aspectj.version> <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
     </properties>
 
     <dependencyManagement>
@@ -67,13 +70,14 @@
             <artifactId>allure-junit-platform</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.16</version>
-            <scope>test</scope>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-generator</artifactId>
+            <version>${allure-generator.version}</version>
+            <type>pom</type>
         </dependency>
+
+
 
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -94,7 +98,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v127</artifactId>
+            <artifactId>selenium-devtools-v130</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 
@@ -152,12 +156,12 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
+            <version>${log4j-core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
+            <version>${log4j-api.version}</version>
         </dependency>
 
         <!-- Annotations -->
@@ -203,6 +207,25 @@
                     <!-- Consider changing this for production -->
                     <testFailureIgnore>true</testFailureIgnore>
                     <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.10.0</version>
+                <executions>
+                    <execution>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <reportVersion>${allure.version}</reportVersion>
+                    <resultsDirectory>${project.build.directory}\allure-results</resultsDirectory>
+                    <reportDirectory>${project.build.directory}\allure-report</reportDirectory>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,3 +1,4 @@
+@allure.label.layer:web
 @allure.label.owner:Jose_Salazar
 @Templete
 Feature: Login en la pagina web de Nombre

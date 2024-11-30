@@ -3,10 +3,15 @@ name: Pruebas de Automatización
 # Define los eventos que activarán el workflow
 on:
   push:
-    branches: [ main ] # Ejecuta el workflow en pushes a la rama main
+    branches: [ allureReport ] # Ejecuta el workflow en pushes a la rama main
+
+  permissions: write-all
+
   schedule:
     # Ejecuta a las 12:00 UTC (8:00 AM hora de Venezuela) los lunes, miércoles y viernes
     - cron: '0 11 * * 2,4'
+
+  workflow_dispatch: # Ejecuta el workflow manualmente
 
 jobs:
   test:
@@ -36,17 +41,24 @@ jobs:
       - name: Run tests and generate report
         run: mvn test "-Dcucumber.filter.tags=@Amyr"
 
-      # Comprime los reportes y capturas de pantalla en un archivo ZIP
-      - name: Compress report and screenshots into a ZIP file
+      # Genera el reporte de las pruebas como un archivo HTML con el historial de pruebas
+      - name:
         run: |
-          zip -r reporte.zip "Reporte 0"
+            cp -r src/test/resources/history target/allure-results
+            allure generate target/allure-results --single-file reporte.html          
 
-      # Sube el archivo ZIP como un artefacto del workflow
-      - name: Upload Extent Report ZIP
+      # Genera el nuevo historial de pruebas
+      - name: Generate history
+        run: |
+            allure generate target/allure-results -o target/allure-report
+            cp -r --remove-destination target/allure-report/history src/test/resources 
+
+      # Sube el archivo
+      - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
-          name: extent-report-zip
-          path: reporte.zip
+          name: reporte
+          path: reporte.html
 
       # Envia un email con el reporte adjunto
       - name: Send email with zipped report
@@ -62,4 +74,4 @@ jobs:
           cc:
           from:
           ignore_cert: true
-          attachments: reporte.zip
+          attachments: reporte.html
