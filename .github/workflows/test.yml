@@ -2,9 +2,10 @@ name: Pruebas de Automatización
 
 # Define los eventos que activarán el workflow
 on:
+  workflow_dispatch: # Para ejecutar el workflow manualmente
+
   push:
-    branches: [ allureReport ] # Ejecuta el workflow en pushes a la rama main
-  workflow_dispatch: # Ejecuta el workflow manualmente
+    branches: [ allureReport ] # Para ejecutar el workflow en pushes a la rama allureReport
 
 permissions: write-all # otorga permisos para hacer push a cualquier rama
 
@@ -62,4 +63,3 @@ jobs:
           github_token: ${{ secrets.SECRET_TOKEN }}
           publish_branch: Reportes
           publish_dir: allure-history
-
