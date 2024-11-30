@@ -13,10 +13,10 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = { "src/test/resources/features" },   // Ruta de los archivos .feature
         glue = { "steps" },                             // Ruta de los archivos .java con los pasos
-        plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
+        plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" },
         monochrome = true,
         snippets = CucumberOptions.SnippetType.CAMELCASE,
-        tags = "@Login"
+        tags = "@Templete" // Etiqueta para ejecutar pruebas específicas
 )
 
 public class TestRunner {
