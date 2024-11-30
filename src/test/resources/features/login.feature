@@ -1,15 +1,15 @@
 @allure.label.layer:web
 @allure.label.owner:Jose_Salazar
 @Templete
-Feature: Login en la pagina web de Nombre
+Feature: Login en la pagina web de Amyr
 
   Background:
-    Given Navego a la pagina web
+    Given Navego a la pagina web de Amyr
 
   @critical
   @Login @Login_001
   Scenario: Iniciar sesión
-    When Ingreso el correo "xonavix163@mvpalace.com" y la contraseña "87654321"
+    When Ingreso el correo "xonavix163@mvpalace.com" y la contraseña ""
     Then Valido que me logueo de forma exitosa
 
   @minor
