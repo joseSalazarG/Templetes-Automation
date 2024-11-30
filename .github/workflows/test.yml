@@ -4,14 +4,9 @@ name: Pruebas de Automatización
 on:
   push:
     branches: [ allureReport ] # Ejecuta el workflow en pushes a la rama main
-
-  permissions: write-all
-
-  schedule:
-    # Ejecuta a las 12:00 UTC (8:00 AM hora de Venezuela) los lunes, miércoles y viernes
-    - cron: '0 11 * * 2,4'
-
   workflow_dispatch: # Ejecuta el workflow manualmente
+
+permissions: write-all # otorga permisos para hacer push a cualquier rama
 
 jobs:
   test:
@@ -39,39 +34,32 @@ jobs:
 
       # Ejecuta tests y genera reporte, filtrando por la etiqueta @AdServer
       - name: Run tests and generate report
-        run: mvn test "-Dcucumber.filter.tags=@Amyr"
+        run: mvn test "-Dcucumber.filter.tags=@Login"
 
-      # Genera el reporte de las pruebas como un archivo HTML con el historial de pruebas
-      - name:
-        run: |
-            cp -r src/test/resources/history target/allure-results
-            allure generate target/allure-results --single-file reporte.html          
-
-      # Genera el nuevo historial de pruebas
-      - name: Generate history
-        run: |
-            allure generate target/allure-results -o target/allure-report
-            cp -r --remove-destination target/allure-report/history src/test/resources 
-
-      # Sube el archivo
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v4
+      # Hace checkout de la rama gh-pages para cargar el historial de reportes
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
         with:
-          name: reporte
-          path: reporte.html
+            ref: testReport
+            path: testReport
 
-      # Envia un email con el reporte adjunto
-      - name: Send email with zipped report
-        uses: dawidd6/action-send-mail@v3
+      # Genera el reporte
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.11
+        if: always()
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.SECRET_EMAIL }} # Usa secretos para la autenticación
-          password: ${{ secrets.SECRET_PASSWORD }}
-          subject: Resultados de Automatización
-          body: Se adjuntan los resultados de la última ejecución de pruebas.
-          to:
-          cc:
-          from:
-          ignore_cert: true
-          attachments: reporte.html
+          gh_pages: testReport
+          allure_history: allure-history
+          allure_results: target/allure-results
+
+      # Publica el reporte en la rama testReport
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.SECRET_TOKEN }}
+          publish_branch: testReport
+          publish_dir: allure-history
+
