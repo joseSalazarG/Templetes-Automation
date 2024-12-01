@@ -2,7 +2,7 @@ name: Pruebas de Automatización
 
 # Define los eventos que activarán el workflow
 on:
-  workflow_dispatch: # Para ejecutar el workflow manualmente
+  workflow_dispatch: # Para ejecutar el workflow manualmente (no se hacerlo funcionar)
 
   push:
     branches: [ allureReport ] # Para ejecutar el workflow en pushes a la rama allureReport
