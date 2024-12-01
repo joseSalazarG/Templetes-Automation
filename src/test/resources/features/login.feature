@@ -9,7 +9,7 @@ Feature: Login en la pagina web de Nombre
   @critical
   @Login @Login_001
   Scenario: Iniciar sesión
-    When Ingreso el correo "xonavix163@mvpalace.com" y la contraseña ""
+    When Ingreso el correo "xonavix163@mvpalace.com" y la contraseña "87654321"
     Then Valido que me logueo de forma exitosa
 
   @minor
