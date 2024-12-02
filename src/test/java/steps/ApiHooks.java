@@ -164,7 +164,7 @@ public class ApiHooks {
     }
 
     /**
-     * Busca la ultima solicitud en la aplicación segun la cedula del usuario  y devuelve su identificador.
+     * Busca la ultima solicitud en la aplicación segun la cedula del usuario y devuelve su identificador.
      * @param user el numero de cedula del usuario.
      * @return El identificador del usuario.
      * @throws IllegalStateException Si no se encuentran usuarios en la respuesta.
