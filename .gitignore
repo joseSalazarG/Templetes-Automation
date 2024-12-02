@@ -6,6 +6,7 @@ log/
 *.git_back
 .idea/
 allure-results
+allure-report
 .allure
 logs/
 

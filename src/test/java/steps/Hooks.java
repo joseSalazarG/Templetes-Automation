@@ -6,6 +6,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,7 +15,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 
@@ -84,6 +86,12 @@ public class Hooks {
 		} finally {
 			closeDriverResources();
 		}
+	}
+
+	@AfterAll
+	public static void setUpResults() {
+		copyFiles("src/test/resources/categories.json", "target/allure-results/categories.json");
+		copyFiles("src/test/resources/environment.properties", "target/allure-results/environment.properties");
 	}
 
 	/**
@@ -974,6 +982,17 @@ public class Hooks {
 			alert.accept();
 		} catch (Exception e) {
 			throw new NoSuchElementException("No se encontró ninguna alerta en el tiempo de espera especificado.");
+		}
+	}
+
+	private static void copyFiles(String source, String destination) {
+		try {
+			File sourceFile = new File(source);
+			File destFile = new File(destination);
+			FileUtils.copyFile(sourceFile, destFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error al copiar el archivo: " + source);
 		}
 	}
 }

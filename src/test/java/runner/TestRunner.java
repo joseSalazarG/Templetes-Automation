@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
         plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" },
         monochrome = true,
         snippets = CucumberOptions.SnippetType.CAMELCASE,
-        tags = "@Templete" // Etiqueta para ejecutar pruebas específicas
+        tags = "@Login" // Etiqueta para ejecutar pruebas específicas
 )
 
 public class TestRunner {
