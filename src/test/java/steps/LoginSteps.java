@@ -1,5 +1,6 @@
 package steps;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,23 +10,43 @@ public class LoginSteps {
 
     LoginLogic loginLogic = new LoginLogic();
 
-    @Given("Navego a la pagina web")
-    public void navegoPaginaWeb() {
-        loginLogic.navegoPaginaWeb();
+    @Given("Navego a la pagina web de CC200")
+    public void navegoALaPaginaWebDeCC() {
+        loginLogic.navegoPaginaWebCC200();
     }
 
-    @When("Ingreso el correo {string} y la contraseña {string}")
-    public void ingresoElCorreoYLaContrasena(String correo, String password) {
-        loginLogic.ingresoCorreoYContrasena(correo, password);
+    @When("Ingreso el codigo de area {string} y el numero de telefono {string}")
+    public void ingresoElCodigoDeAreaYElNumeroDeTelefono(String area, String numero) {
+        loginLogic.ingresoCodigoAreaNumeroTelefono(area, numero);
+    }
+
+    @And("Ingreso el codigo de OTP {string}")
+    public void ingresoElCodigoDeOTP(String otp) {
+        loginLogic.ingresoCodigoOtp(otp);
     }
 
     @Then("Valido que me logueo de forma exitosa")
     public void validoQueMeLogueoDeFormaExitosa() {
-        loginLogic.validoLoginExitoso();
+        loginLogic.validoLogueoFormaExitosa();
     }
 
-    @Then("Valido cerrar sesion")
-    public void validoCerrarSesion() {
-        loginLogic.validoCerrarSesion();
+    @Then("Valido que se visualice el mensaje de error {string}")
+    public void validoQueSeVisualiceElMensajeDeError(String mensaje) {
+        loginLogic.validoVisualiceMensajeError(mensaje);
+    }
+
+    @Then("Valido que se visualice el mensaje de error de OTP {string}")
+    public void validoQueSeVisualiceElMensajeDeErrorDeOTP(String mensaje) {
+        loginLogic.validoVisualiceMensajeErrorOTP(mensaje);
+    }
+
+    @And("Cierro la sesion")
+    public void cierroLaSesion() {
+        loginLogic.cierroSesion();
+    }
+
+    @Then("Valido que se cerro la sesion")
+    public void validoQueSeCerroLaSesion() {
+        loginLogic.validoCerroSesion();
     }
 }

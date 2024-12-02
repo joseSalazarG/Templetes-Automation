@@ -4,15 +4,20 @@ import lombok.Getter;
 
 @Getter
 public class LoginPage {
-    // ejemplos de xpath
-    private final String InputLogin = "//input[@name='email']";
-    private final String InputPassword = "//input[@name='password']";
-    private final String btnSubmit = "//button[@type='submit']";
-    private final String lbBienvenido = "//h2[.='Bienvenido']";
-    private final String btnPerfil = "(//button[@aria-controls='msgs-menu'])[last()]";
-    private final String btnCerrarSesion = "//button[.='Cerrar sesión']";
-    private final String lbUsuarioInactivo = "//p[contains(text(),'usuario se encuentra deshabilitado')]";
-    private final String lbCampoRequerido = "//p[contains(text(),'Se requiere')]";
-    private final String lbCaracteresMinimos = "//p[contains(text(),'El email debe tener mínimo 9 caracteres')]";
-    private final String lbCaracteresMinimos2 = "//p[contains(text(),'La contraseña debe tener mínimo 8 caracteres')]";
+
+    private final String btnPais = "//div[@class='flag ve']";
+    private final String inputPais = "//input[@class='search-box']";
+    private final String btnUnitedStates = "//span[@class='country-name']";
+    private final String inputTelefono = "//input[@class='form-control ']";
+    private final String btnEnviarSMS = "//button[contains(text(), 'Enviar SMS')]";
+    private final String inputCodigo = "//input[@class='input-form']";
+    private final String btnIniciarSesion = "//button[@type='submit']";
+    private final String btnNuevoGrupo = "//span[@class='MuiIconButton-label']";
+    private final String lbMensaje = "//div[@id='error-form']";
+    private final String popUpMensaje = "//h5[contains(text(), 'Seleccione su país e introduzca un número de teléfono válido para continuar')]";
+    private final String lbTlfNoRegistrado = "//p[contains(text(), 'Este número de teléfono no está registrado como usuario')]";
+    private final String img = "//img[contains(@src, 'https://firebasestorage.googleapis.com/')]";
+    private final String btnPerfil = "//div[@class='profile']";
+    private final String lbCC200Web = "//p[@class='profile-reserved']";
+    private final String btnCerraSesion = "//span[contains(text(),'logout')]";
 }

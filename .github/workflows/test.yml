@@ -5,7 +5,7 @@ on:
   workflow_dispatch: # Para ejecutar el workflow manualmente (no se hacerlo funcionar)
 
   push:
-    branches: [ allureReport ] # Para ejecutar el workflow en pushes a la rama allureReport
+    branches: [ cc200 ] # Para ejecutar el workflow en pushes a la rama allureReport
 
 permissions: write-all # otorga permisos para hacer push a cualquier rama
 
@@ -35,7 +35,7 @@ jobs:
 
       # Ejecuta tests y genera reporte, filtrando por la etiqueta @AdServer
       - name: Run tests and generate report
-        run: mvn test "-Dcucumber.filter.tags=@Login"
+        run: mvn test "-Dcucumber.filter.tags=@CC200"
 
       # Hace checkout de la rama gh-pages para cargar el historial de reportes
       - name: Load test report history
