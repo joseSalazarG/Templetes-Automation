@@ -6,7 +6,7 @@ on:
 
   schedule:
     # ejecuta el workflow a las 5 de la tarde los martes
-    - cron: '0 21 * * 2'
+    - cron: '4 17 * * 2'
 
 
 permissions: write-all # otorga permisos para hacer push a cualquier rama
