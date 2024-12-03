@@ -237,7 +237,6 @@ public class ApiHooks {
         }
 
         hubToken = getHubToken(urlToken, credenciales, authToken);
-
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", hubToken);
         request.contentType(ContentType.JSON);
