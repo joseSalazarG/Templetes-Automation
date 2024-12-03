@@ -4,8 +4,10 @@ name: Pruebas de Automatización
 on:
   workflow_dispatch: # Para ejecutar el workflow manualmente (no se hacerlo funcionar)
 
-  push:
-    branches: [ cc200 ] # Para ejecutar el workflow en pushes a la rama allureReport
+  schedule:
+    # ejecuta el workflow a las 5 de la tarde los martes
+    - cron: '57 20 * * 2'
+
 
 permissions: write-all # otorga permisos para hacer push a cualquier rama
 
