@@ -65,12 +65,6 @@ Generación de informes detallados con ExtentReports.
 
 ***
 
-## Licencia
-
-Este proyecto está bajo la licencia Nolatech 2024.
-
-***
-
 ## Información de Contacto
 
 Para cualquier consulta o colaboración, no dudes en contactarme en "correo electrónico
