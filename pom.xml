@@ -8,22 +8,24 @@
     <artifactId>Templete</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- Cuando actualices selenium modifica la linea 60 y pico (las devtools) -->
+    <!-- Verifica compatibilidad -->
     <properties>
-        <selenium.version>4.27.0</selenium.version> <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-        <junit.version>5.10.0</junit.version> <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-        <cucumber.version>7.20.1</cucumber.version> <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-        <allure.version>2.29.0</allure.version> <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-bom -->
+        <selenium.version>4.40.0</selenium.version> <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <junit.version>6.0.2</junit.version> <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <cucumber.version>7.34.2</cucumber.version> <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+        <allure.version>2.30.0</allure.version> <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-bom -->
         <json-simple.version>1.1.1</json-simple.version> <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
-        <slf4j-simple.version>2.0.16</slf4j-simple.version> <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-        <log4j-core.version>2.21.0</log4j-core.version> <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-        <log4j-api.version>2.21.0</log4j-api.version> <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <slf4j-simple.version>2.0.17</slf4j-simple.version> <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <log4j-core.version>2.25.3</log4j-core.version> <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <log4j-api.version>2.25.3</log4j-api.version> <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
         <commons-logging.version>1.2</commons-logging.version> <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
-        <lombok.version>1.18.32</lombok.version> <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <lombok.version>1.18.38</lombok.version> <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <annotations.version>RELEASE</annotations.version> <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
-        <webdrivermanager.version>5.9.0</webdrivermanager.version> <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
-        <restassured.version>5.4.0</restassured.version> <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version> <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version> <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+        <webdrivermanager.version>6.3.3</webdrivermanager.version> <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+        <restassured.version>6.0.0</restassured.version> <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version> <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version> <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- https://maven.apache.org/general.html#encoding-warning -->
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> <!-- https://maven.apache.org/general.html#encoding-warning -->
         <maven.compiler.source>17</maven.compiler.source> <!-- https://maven.apache.org/plugins/maven-compiler-plugin/ -->
@@ -58,7 +60,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v130</artifactId>
+            <artifactId>selenium-devtools-v144</artifactId>
             <version>${selenium.version}</version>
         </dependency>
 
