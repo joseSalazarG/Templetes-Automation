@@ -3,7 +3,7 @@ name: Pruebas de Automatización
 # Define los eventos que activarán el workflow
 on:
   schedule:
-  - cron: '8 12 * * *' # Ejecuta el workflow los martes a las 17:04
+  #- cron: '8 12 * * *' # Ejecuta el workflow los martes a las 17:04
 
 
 permissions: write-all # otorga permisos para hacer push a cualquier rama
