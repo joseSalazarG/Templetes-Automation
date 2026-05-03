@@ -1,0 +1,65 @@
+name: Pruebas de Automatización
+
+# Define los eventos que activarán el workflow
+on:
+  workflow_dispatch: # Para ejecutar el workflow manualmente (no se hacerlo funcionar)
+
+  push:
+    branches: [ allureReport ] # Para ejecutar el workflow en pushes a la rama allureReport
+
+permissions: write-all # otorga permisos para hacer push a cualquier rama
+
+jobs:
+  test:
+    runs-on: ubuntu-latest # Define el tipo de runner que ejecutará el job
+
+    steps:
+      # Realiza el checkout del código fuente
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Configura Java 17 usando Temurin
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      # Cachea las dependencias de Maven para mejorar los tiempos de ejecución
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # Ejecuta tests y genera reporte, filtrando por la etiqueta @AdServer
+      - name: Run tests and generate report
+        run: mvn test "-Dcucumber.filter.tags=@Login"
+
+      # Hace checkout de la rama gh-pages para cargar el historial de reportes
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+            ref: Reportes
+            path: Reportes
+
+      # Genera el reporte
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.11
+        if: always()
+        with:
+          gh_pages: Reportes
+          allure_history: allure-history
+          allure_results: target/allure-results
+
+      # Publica el reporte en la rama testReport
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.SECRET_TOKEN }}
+          publish_branch: Reportes
+          publish_dir: allure-history
