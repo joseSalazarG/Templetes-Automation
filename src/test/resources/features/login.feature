@@ -24,4 +24,10 @@ Feature: Login en la pagina NopCommerce
     When Hago click en el boton de cerrar sesion
     Then Valido que cierro sesion de forma exitosa
 
+  @Login
+  @Login_003
+  Scenario: Test de prueba
+    When Hago click en el carrito
+    Then Valido el carrito esta vacio
+
 

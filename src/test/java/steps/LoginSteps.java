@@ -48,4 +48,14 @@ public class LoginSteps {
     public void Cargo_las_cookies() {
         loginLogic.cargar_cookies();
     }
+
+    @When("Hago click en el carrito")
+    public void hagoClickEnElCarrito() {
+        loginLogic.hagoClickEnElCarrito();
+    }
+
+    @Then("Valido el carrito esta vacio")
+    public void validoElCarritoEstaVacio() {
+        loginLogic.validoElCarritoEstaVacio();
+    }
 }

@@ -77,6 +77,20 @@ public class LoginLogic extends Hooks {
         assertTrue("No se visualiza el botón de login", elementIsDisplayed(loginPage.getBtnLogin()));
     }
 
+    public void hagoClickEnElCarrito() {
+        String step = "Hago click en el carrito";
+        log.info(step);
+
+        clickElement(loginPage.getBtnCarrito());
+    }
+
+    public void validoElCarritoEstaVacio() {
+        String step = "Valido que el carrito esta vacio";
+        log.info(step);
+
+        assertTrue("No se encuentra el mensaje 'Carrito vacio'", elementIsDisplayed(loginPage.getLbCarritoVacio()));
+    }
+
     /*
     public void validoMensajeError(String mensaje) {
         String step = "Valido ver el mensaje de error " + mensaje;

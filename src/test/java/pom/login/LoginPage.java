@@ -7,11 +7,12 @@ public class LoginPage {
 
     // botones en la tienda
     private final String btnLogin = "//a[@href='/login']/parent::li";
+    private final String btnCarrito = "//a[@href='/view_cart']/parent::li";
+    private final String lbCarritoVacio = "//b[text()='Cart is empty!']";
     private final String btnLogOut = "//a[@href='/logout']/parent::li";
     private final String InputEmail = "//input[@type='email']";
     private final String InputPassword = "//input[@type='password']";
     private final String btnSubmit = "//button[@type='submit']";
-    private final String lbBienvenido = "//a[.='Welcome %s']";
 
     // ejemplos de xpath
     /*
