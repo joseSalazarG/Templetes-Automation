@@ -1,0 +1,7 @@
+{
+  "name": "Jose",
+  "type": "local",
+  "buildName": "Selenium Test Run",
+  "buildUrl": "http://localhost",
+  "reportName": "Reporte de pruebas con Allure"
+}
