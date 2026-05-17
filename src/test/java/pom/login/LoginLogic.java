@@ -91,6 +91,13 @@ public class LoginLogic extends Hooks {
         assertTrue("No se encuentra el mensaje 'Carrito vacio'", elementIsDisplayed(loginPage.getLbCarritoVacio()));
     }
 
+    public void validarSeVisualizaUnMensajeDeErrorDeCredenciales() {
+        String step = "Valido que se visualiza un mensaje de error de credenciales";
+        log.info(step);
+
+        assertTrue("No se visualiza el label de error", elementIsDisplayed(loginPage.getLbErrorCredenciales()));
+    }
+
     /*
     public void validoMensajeError(String mensaje) {
         String step = "Valido ver el mensaje de error " + mensaje;

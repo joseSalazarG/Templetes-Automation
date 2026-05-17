@@ -30,4 +30,10 @@ Feature: Login en la pagina NopCommerce
     When Hago click en el carrito
     Then Valido el carrito esta vacio
 
+  @Login
+  @Login_004
+  Scenario: Iniciar sesion con credenciales erroneas
+    When Hago click en el boton de login
+    And Ingreso el usuario "maria11@noexiste" y la contraseña "holadaw"
+    Then Validar se visualiza un mensaje de error de credenciales
 

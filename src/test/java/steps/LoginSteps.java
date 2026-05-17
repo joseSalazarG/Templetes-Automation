@@ -1,5 +1,6 @@
 package steps;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -57,5 +58,10 @@ public class LoginSteps {
     @Then("Valido el carrito esta vacio")
     public void validoElCarritoEstaVacio() {
         loginLogic.validoElCarritoEstaVacio();
+    }
+
+    @Then("Validar se visualiza un mensaje de error de credenciales")
+    public void validarSeVisualizaUnMensajeDeErrorDeCredenciales() {
+        loginLogic.validarSeVisualizaUnMensajeDeErrorDeCredenciales();
     }
 }

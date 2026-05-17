@@ -13,7 +13,7 @@ import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 @ConfigurationParameter(key = "cucumber.plugin", value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm,pretty")
 @ConfigurationParameter(key = "cucumber.monochrome", value = "true")
 @ConfigurationParameter(key = "cucumber.snippets", value = "CAMELCASE")
-@ConfigurationParameter(key = "cucumber.filter.tags", value = "@Login") // AQUI
+@ConfigurationParameter(key = "cucumber.filter.tags", value = "@Register_001") // AQUI
 
 public class TestRunner {
     

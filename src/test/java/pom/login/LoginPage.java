@@ -13,6 +13,7 @@ public class LoginPage {
     private final String InputEmail = "//input[@type='email']";
     private final String InputPassword = "//input[@type='password']";
     private final String btnSubmit = "//button[@type='submit']";
+    private final String lbErrorCredenciales = "//p[text()='Your email or password is incorrect!']";
 
     // ejemplos de xpath
     /*
