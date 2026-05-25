@@ -1,6 +1,6 @@
 @allure.label.layer:web
 @allure.label.owner:Jose_Salazar
-@Register
+@All
 Feature: Registro en la pagina NopCommerce
 
   # RECUERDA: el nombre del escenario no puede empezar con un "NO"

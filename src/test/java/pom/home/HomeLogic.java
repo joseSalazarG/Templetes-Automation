@@ -4,14 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pom.home.HomeLogic;
 import pom.home.HomePage;
 import steps.Hooks;
 import static org.junit.Assert.*;
 
 
 public class HomeLogic extends Hooks {
+
      HomePage homePage = new HomePage();
+
     private static final Logger log = LogManager.getLogger(HomeLogic.class);
     public void Cuando_hago_click_al_boton_productos() {
       String step = "Cuando hago click al boton productos";
@@ -30,7 +31,7 @@ public class HomeLogic extends Hooks {
      String step = "Verifico que unicamente se visualice ese producto";
         log.info(step);
 
-        assertTrue("No se visualiza el Producto Buscado", elementIsDisplayed(homePage.getCamisaVerdeBusqueda()));
+        assertTrue(elementIsDisplayed(homePage.getCamisaVerdeBusqueda()), "No se visualiza el Producto Buscado");
     
     }
 }
