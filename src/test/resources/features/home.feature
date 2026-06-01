@@ -12,7 +12,7 @@ Feature: Home en la pagina NopCommerce
     @Home
     @Home_001
     @CamisaVerde
-    Scenario:
+    Scenario: Gobert no puso el nombre
       When Cuando hago click al boton productos
       And Busco el producto Fancy Green Top
       Then Verifico que unicamente se visualice ese producto
