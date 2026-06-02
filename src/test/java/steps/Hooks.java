@@ -40,9 +40,9 @@ public class Hooks {
 	public static int auxint = 0;
 	public static int auxTwoint = 0;
 	private static final String PLATFORM_NAME = "Android";
-	private static final String APP_PACKAGE = "com.example.poke_app";
+	private static final String APP_PACKAGE = "com.expandtesting.practice";
 	private static final String APP_ACTIVITY = ".MainActivity";
-	private static final String APP_PATH = "src/test/resources/app/app-release.apk";
+	//private static final String APP_PATH = "src/test/resources/app/app-release.apk";
 	private static final String APPIUM_SERVER_URL = "http://127.0.0.1:4723/";
 
 	/**
@@ -109,7 +109,7 @@ public class Hooks {
 	private void initializeDriver(UiAutomator2Options options) {
 		try {
 			log.info("Iniciando el driver de Appium");
-			URL androidDriver = new URL(APPIUM_SERVER_URL);
+			URL androidDriver = java.net.URI.create(APPIUM_SERVER_URL).toURL();
 			driver = new AndroidDriver(androidDriver, options);
 			action = new Actions(driver);
 			wait = new WebDriverWait(driver, Duration.ofSeconds(15));

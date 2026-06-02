@@ -16,6 +16,6 @@ public class LoginLogic extends Hooks {
         String step = "Inicio sesion";
         log.info(step);
 
-
+        
     }
 }

@@ -1,20 +1,18 @@
 package runner;
 
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
-import org.junit.runner.RunWith;
+import org.junit.platform.suite.api.ConfigurationParameter;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.Suite;
+import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(
-        features = {"src/test/resources/features"},
-        glue = {"steps"},
-        plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:", "json:target/cucumber-reports.json"},
-        monochrome = true,
-        snippets = CucumberOptions.SnippetType.CAMELCASE,
-        tags = "@"
-
-
-)
+@Suite
+@IncludeEngines("cucumber")
+@SelectPackages("features")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "steps")
+@ConfigurationParameter(key = "cucumber.monochrome", value = "true")
+@ConfigurationParameter(key = "cucumber.snippets", value = "CAMELCASE")
+@ConfigurationParameter(key = "cucumber.filter.tags", value = "@Login") // AQUI
 
 public class TestRunner {
 
