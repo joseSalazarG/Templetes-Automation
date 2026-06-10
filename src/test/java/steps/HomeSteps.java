@@ -17,7 +17,7 @@ public class HomeSteps {
 
     @And("Busco el producto Fancy Green Top")
     public void Busco_el_producto_Fancy_Green_Top() {
-         homeLogic.Busco_el_producto_Fancy_Green_Top();
+        homeLogic.Busco_el_producto_Fancy_Green_Top();
     }
 
     @Then("Verifico que unicamente se visualice ese producto")

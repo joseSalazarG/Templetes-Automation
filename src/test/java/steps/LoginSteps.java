@@ -64,4 +64,9 @@ public class LoginSteps {
         loginLogic.validarSeVisualizaUnMensajeDeErrorDeCredenciales();
     }
 
+    @Given("placeholder test API")
+    public void placeholder_test_API() {
+        loginLogic.placeholderTestAPI();
+    }
+
 }

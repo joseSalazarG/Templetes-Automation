@@ -99,8 +99,7 @@ public class Hooks {
 	/**
 	 * Carga un conjunto de cookies en el navegador.
 	 *
-	 * @param cookies El conjunto de cookies a cargar en el navegador.
-	 */
+     */
 	public void loadCookies() {
 		try {
 			for (Cookie cookie : cookies) {

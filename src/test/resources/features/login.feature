@@ -37,3 +37,7 @@ Feature: Login en la pagina NopCommerce
     And Ingreso el usuario "maria11@noexiste" y la contraseña "holadaw"
     Then Validar se visualiza un mensaje de error de credenciales
 
+
+  @api
+  Scenario: Test de prueba API
+    Given placeholder test API

@@ -13,13 +13,15 @@ import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 @ConfigurationParameter(key = "cucumber.plugin", value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm,pretty")
 @ConfigurationParameter(key = "cucumber.monochrome", value = "true")
 @ConfigurationParameter(key = "cucumber.snippets", value = "CAMELCASE")
-@ConfigurationParameter(key = "cucumber.filter.tags", value = "@All") // AQUI
+@ConfigurationParameter(key = "cucumber.filter.tags", value = "@api") // AQUI
 
 public class TestRunner {
     
 }
 
 /*
+    mvn -U clean test "-Dcucumber.filter.tags=@api"
+
     Ejecuta los tests desde maven con el siguiente comando:
 
     mvn test "-Dcucumber.filter.tags=@All"
