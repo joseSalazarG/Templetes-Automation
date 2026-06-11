@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este es un proyecto enfocado en la automatización de la página web "url". Utiliza una combinación de Selenium, Cucumber, JUnit y Maven junto con Java 17 para proporcionar una solución robusta y eficiente en la automatización de pruebas web.
+Este es un proyecto enfocado en la automatización de la página web "url". Utiliza una combinación de Selenium, Cucumber, JUnit y Maven junto con Java 21 para proporcionar una solución robusta y eficiente en la automatización de pruebas web.
 
 ***
 
@@ -64,10 +64,6 @@ Uso de Cucumber para pruebas BDD (Behavior Driven Development).
 Generación de informes detallados con ExtentReports.
 
 ***
-
-## Licencia
-
-Este proyecto está bajo la licencia Nolatech 2024.
 
 ***
 
