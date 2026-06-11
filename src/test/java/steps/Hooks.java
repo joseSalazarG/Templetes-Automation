@@ -38,21 +38,16 @@ public class Hooks {
 	@Before
 	public static void initializeDriver() {
 		try {
-			try {
-				WebDriverManager.chromedriver().clearResolutionCache();
-				WebDriverManager.chromedriver().clearDriverCache();
-				WebDriverManager.chromedriver().setup();
-				System.out.println("[INFO] ChromeDriver descargado y configurado por WebDriverManager.");
-			} catch (Exception e) {
-				System.err.println("[WARN] No se pudo descargar ChromeDriver automáticamente: " + e.getMessage());
-				System.err.println("[WARN] Intentando usar el ChromeDriver ya instalado en el sistema (PATH)...");
-			}
+			WebDriverManager.chromedriver().clearResolutionCache();
+			WebDriverManager.chromedriver().clearDriverCache();
+			WebDriverManager.chromedriver().setup();
+			System.out.println("[INFO] ChromeDriver descargado y configurado por WebDriverManager.");
 			driver = new ChromeDriver(createChromeOptions());
 			wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 			action = new Actions(driver);
 		} catch (Exception e) {
 			System.err.println("[ERROR] No se pudo inicializar ChromeDriver: " + e.getMessage());
-			throw new RuntimeException("No se pudo inicializar ChromeDriver. Asegúrate de tener el ejecutable en el PATH o revisa la conexión a internet.", e);
+			throw new RuntimeException("No se pudo inicializar ChromeDriver. Asegúrate de revisar la conexión a internet.", e);
 		}
 	}
 
@@ -67,7 +62,7 @@ public class Hooks {
 		chromeOptions.addArguments("--no-sandbox");
 		chromeOptions.addArguments("--disable-dev-shm-usage");
 		chromeOptions.addArguments("ignore-certificate-errors");
-		//chromeOptions.addArguments("--headless");
+		chromeOptions.addArguments("--headless");
 		chromeOptions.addArguments("--disable-gpu");
 		chromeOptions.addArguments("use-fake-ui-for-media-stream");
 		chromeOptions.addArguments("--window-size=1920,1080");
@@ -104,8 +99,7 @@ public class Hooks {
 	/**
 	 * Carga un conjunto de cookies en el navegador.
 	 *
-	 * @param cookies El conjunto de cookies a cargar en el navegador.
-	 */
+     */
 	public void loadCookies() {
 		try {
 			for (Cookie cookie : cookies) {
@@ -1002,15 +996,10 @@ public class Hooks {
 	 */
 	public void acceptAlert() {
 		try {
-			// Jose: que esperanza la mia quien hizo esto?
 			Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-			if (alert == null) {
-				throw new NoSuchElementException("No se encontró ninguna alerta en el tiempo de espera especificado.");
-			}
 			alert.accept();
 		} catch (Exception e) {
 			throw new NoSuchElementException("No se encontró ninguna alerta en el tiempo de espera especificado.");
 		}
 	}
 }
-

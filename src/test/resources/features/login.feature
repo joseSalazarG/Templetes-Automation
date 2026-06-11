@@ -1,9 +1,9 @@
 @allure.label.layer:web
 @allure.label.owner:Jose_Salazar
-@Login
+@All
 Feature: Login en la pagina NopCommerce
 
-  # Para mi yo del futuro: el nombre del escenario no puede empezar con un "NO"
+  # RECUERDA: el nombre del escenario no puede empezar con un "NO"  
   # el nombre del escenario describe lo que esperas que pase, no lo que no quieres
 
   Background:
@@ -30,4 +30,14 @@ Feature: Login en la pagina NopCommerce
     When Hago click en el carrito
     Then Valido el carrito esta vacio
 
+  @Login
+  @Login_004
+  Scenario: Iniciar sesion con credenciales erroneas
+    When Hago click en el boton de login
+    And Ingreso el usuario "maria11@noexiste" y la contraseña "holadaw"
+    Then Validar se visualiza un mensaje de error de credenciales
 
+
+  @api
+  Scenario: Test de prueba API
+    Given placeholder test API

@@ -41,7 +41,7 @@ Para utilizar "Nombre del proyecto", es necesario tener instalado Java 17 y Mave
 
 ## Instrucciones de Uso
 
-Para ejecutar las pruebas automatizadas en xxxx Web, sigue estos pasos:
+Para ejecutar las pruebas automatizadas en AdServer Web, sigue estos pasos:
 
 1. Clona el repositorio a tu máquina local.
 ```
@@ -67,7 +67,7 @@ Generación de informes detallados con ExtentReports.
 
 ## Licencia
 
-Este proyecto está bajo la licencia xxxxx 2024.
+Este proyecto está bajo la licencia Nolatech 2024.
 
 ***
 

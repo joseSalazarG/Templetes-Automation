@@ -6,6 +6,14 @@ import pom.baseUrl.UrlConstant;
 import steps.Hooks;
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+
 public class LoginLogic extends Hooks {
 
     LoginPage loginPage = new LoginPage();
@@ -89,6 +97,41 @@ public class LoginLogic extends Hooks {
         log.info(step);
 
         assertTrue("No se encuentra el mensaje 'Carrito vacio'", elementIsDisplayed(loginPage.getLbCarritoVacio()));
+    }
+
+    public void validarSeVisualizaUnMensajeDeErrorDeCredenciales() {
+        String step = "Valido que se visualiza un mensaje de error de credenciales";
+        log.info(step);
+
+        assertTrue("No se visualiza el label de error", elementIsDisplayed(loginPage.getLbErrorCredenciales()));
+    }
+
+    public void placeholderTestAPI() {
+        String step = "Ejecutando placeholder para test API";
+        log.info(step);
+        
+        RequestSpecification request = RestAssured.given();
+        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
+        //request.header("Authorization", authorization);
+        request.contentType(ContentType.JSON);
+        Map<String, String> jsonCredenciales = new HashMap<>();
+        jsonCredenciales.put("email", "jose@testing.com");
+        jsonCredenciales.put("password", "perencejo");
+        request.body(jsonCredenciales);
+
+        Response response = request.post("/auth/login");
+        int statusCode = response.getStatusCode();
+        String dataString = null;
+
+        if (statusCode == 200) {
+            log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
+            String token = response.jsonPath().getString("access_token");
+            log.info("Token recibido: " + token);
+        }  else {
+            log.error("La solicitud falló. Código de estado: " + statusCode);
+            dataString = response.getBody().asString();
+            log.error("Respuesta del servidor: " + dataString);
+        }
     }
 
     /*

@@ -58,4 +58,15 @@ public class LoginSteps {
     public void validoElCarritoEstaVacio() {
         loginLogic.validoElCarritoEstaVacio();
     }
+
+    @Then("Validar se visualiza un mensaje de error de credenciales")
+    public void validarSeVisualizaUnMensajeDeErrorDeCredenciales() {
+        loginLogic.validarSeVisualizaUnMensajeDeErrorDeCredenciales();
+    }
+
+    @Given("placeholder test API")
+    public void placeholder_test_API() {
+        loginLogic.placeholderTestAPI();
+    }
+
 }

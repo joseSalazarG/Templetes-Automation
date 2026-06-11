@@ -13,17 +13,27 @@ import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 @ConfigurationParameter(key = "cucumber.plugin", value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm,pretty")
 @ConfigurationParameter(key = "cucumber.monochrome", value = "true")
 @ConfigurationParameter(key = "cucumber.snippets", value = "CAMELCASE")
-@ConfigurationParameter(key = "cucumber.filter.tags", value = "@Login") // AQUI
+@ConfigurationParameter(key = "cucumber.filter.tags", value = "@api") // AQUI
 
 public class TestRunner {
     
 }
 
 /*
+    mvn -U clean test "-Dcucumber.filter.tags=@api"
+
+    Ejecuta los tests desde maven con el siguiente comando:
+
+    mvn test "-Dcucumber.filter.tags=@All"
+
+    Luego el reporte de Allure se genera automáticamente en la carpeta target/allure-results con el historial de ejecuciones.
+
     Para visualizar el reporte de Allure ejecuta uno de los siguientes comandos
 
     1)  Servidor local: allure serve target/allure-results
 
+    o
+
     2)  Crear un html: allure generate target/allure-results -o target/allure-report --clean
-        Abre el archivo en target/allure-report/index.html
+        Abre el reporte con: allure open target/allure-report
 */    
