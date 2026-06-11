@@ -3,6 +3,7 @@ package pom.login;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pom.baseUrl.UrlConstant;
+import steps.ApiHooks;
 import steps.Hooks;
 import static org.junit.Assert.*;
 
@@ -15,8 +16,11 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public class LoginLogic extends Hooks {
+    public static int statusFlag = 0;
+    public static String authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3N2M0ZmIyMC1hNjcwLTRiNWUtODJlZi04Zjg4ZGFjOTg5MWUiLCJyb2xlIjoiQ1VTVE9NRVIiLCJlbWFpbCI6Impvc2VAdGVzdGluZy5jb20iLCJuYW1lIjoiam96ZSBxd2VydHkiLCJpYXQiOjE3ODEyMTU4MTcsImV4cCI6MTc4MTIxOTQxN30.AfRYOKJ1yPSFot75-obw12DWIhrJ8ABC-krDb3a4faU";
 
     LoginPage loginPage = new LoginPage();
+    ApiHooks apiHooks = new ApiHooks();
     private static final Logger log = LogManager.getLogger(LoginLogic.class);
 
     public void navegoPaginaWeb() {
@@ -106,13 +110,21 @@ public class LoginLogic extends Hooks {
         assertTrue("No se visualiza el label de error", elementIsDisplayed(loginPage.getLbErrorCredenciales()));
     }
 
-    public void placeholderTestAPI() {
-        String step = "Ejecutando placeholder para test API";
+
+
+// FUNCIONES PARA LA AUTOMATIZACION DE PRUEBAS DE LOS ENDPOINTS
+
+
+
+
+
+
+    public void endpointLogin() {
+        String step = "Ejecutando request para login de usuario cliente";
         log.info(step);
         
         RequestSpecification request = RestAssured.given();
         request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
-        //request.header("Authorization", authorization);
         request.contentType(ContentType.JSON);
         Map<String, String> jsonCredenciales = new HashMap<>();
         jsonCredenciales.put("email", "jose@testing.com");
@@ -126,14 +138,85 @@ public class LoginLogic extends Hooks {
         if (statusCode == 200) {
             log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
             String token = response.jsonPath().getString("access_token");
+            LoginLogic.authorization = "Bearer " + token;
             log.info("Token recibido: " + token);
         }  else {
             log.error("La solicitud falló. Código de estado: " + statusCode);
             dataString = response.getBody().asString();
             log.error("Respuesta del servidor: " + dataString);
         }
+        statusFlag = statusCode;
     }
 
+    public void validoLoginExitosoEndpoint() {
+        String step = "Valido que el login es exitoso";
+        log.info(step);
+
+        assertEquals("El código de estado no es 200", 200, statusFlag);
+    }
+
+    public void endpointSuperAdmin(){
+        String step = "Ejecutando request para login de usuario superadmin";
+        log.info(step);
+
+        RequestSpecification request = RestAssured.given();
+        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
+        request.contentType(ContentType.JSON);
+        Map<String, String> jsonCredenciales = new HashMap<>();
+        jsonCredenciales.put("email", "jose@testing.com"); 
+        jsonCredenciales.put("password", "perencejo");
+        request.body(jsonCredenciales);
+
+        Response response = request.post("/auth/login");
+        int statusCode = response.getStatusCode();
+        String dataString = null;
+
+         if (statusCode == 200) {
+            log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
+            String token = response.jsonPath().getString("access_token");
+            LoginLogic.authorization = "Bearer " + token;
+            log.info("Token recibido: " + token);
+        }  else {
+            log.error("La solicitud falló. Código de estado: " + statusCode);
+            dataString = response.getBody().asString();
+            log.error("Respuesta del servidor: " + dataString);
+        }
+        statusFlag = statusCode;
+    }
+
+    public void endpointObtenerInformacionSuperAdminConTokenCliente() {
+        String step = "Ejecutando request para obtener información de Super Admin usando token de Cliente";
+        log.info(step);
+
+        RequestSpecification request = RestAssured.given();
+        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
+        
+        String tokenLimpio = LoginLogic.authorization.replace("Bearer ", "");
+        request.header("Authorization", "Bearer " + tokenLimpio);
+        request.contentType(ContentType.JSON);
+
+        Response response = request.get("/api/v1/admin/doctors/");
+        int statusCode = response.getStatusCode();
+        String dataString = response.getBody().asString();
+
+        if (statusCode == 200) {
+            log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
+            log.info("Respuesta: " + dataString);
+        } else {
+            log.warn("La solicitud falló. Código de estado: " + statusCode);
+            log.info("Respuesta del servidor: " + dataString);
+        }
+        statusFlag = statusCode;
+    }
+
+    public void validoAccesoDenegadoPorRol() {
+        String step = "Valido que el sistema deniegue el acceso por falta de permisos";
+        log.info(step);
+
+        assertEquals("El código de estado no indica acceso denegado por rol", 403, statusFlag);
+    }
+    
+    
     /*
     public void validoMensajeError(String mensaje) {
         String step = "Valido ver el mensaje de error " + mensaje;

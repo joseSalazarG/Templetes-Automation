@@ -15,8 +15,9 @@ public class ApiHooks {
     //API Endpoints
     public static final String urlToken = "https://xxxxxxx/hubapi/login";
     public static final String credenciales = "{\"email\":\"xxxxx\",\"password\":\"xxxxxxx\"}";
-    public static final String authToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    public static String authToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     public static String hubToken = null;
+    public static int statusFlag = 0;
 
     /**
      * Obtiene el token de autenticación para realizar solicitudes en la aplicación.
@@ -25,7 +26,7 @@ public class ApiHooks {
      * @param authorization token de autorizacion para acceder a la api.
      * @return el token de autenticación.
      */
-    public String getHubToken(String baseUrl, String jsonCredenciales ,String authorization ) {
+    public String getLoginToken(String baseUrl, String jsonCredenciales ,String authorization ) {
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", authorization);
@@ -40,7 +41,8 @@ public class ApiHooks {
             cachedToken = response.jsonPath().getString("data.token");
             System.err.println(cachedToken);
         }
-        return cachedToken;
+        authToken = cachedToken;
+        return authToken;
     }
     /**
      * Busca la ultima solicitud en la aplicación segun la id del usuario  y devuelve su identificador.
@@ -52,7 +54,7 @@ public class ApiHooks {
         String url = "https://xxxxxxxxxxx/hubapi/members?search=";
         String searchUrl = url + user;
 
-        hubToken = getHubToken(urlToken,credenciales, authToken);
+        hubToken = getLoginToken(urlToken,credenciales, authToken);
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", hubToken);
@@ -80,7 +82,7 @@ public class ApiHooks {
         String url = "https://xxxxxxxxxxx/api/dev/userstreamchange/list_get?search=";
         String baseUrl = url + user;
 
-        hubToken = getHubToken(urlToken,credenciales, authToken);
+        hubToken = getLoginToken(urlToken,credenciales, authToken);
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", hubToken);
@@ -116,7 +118,7 @@ public class ApiHooks {
             json = "{ \"_id\": \"" + id + "\",\"status\": \"ACEPTADO\",\"statusReason\": \"Motivo de prueba\" }";
         }
 
-        hubToken = getHubToken(urlToken,credenciales, authToken);
+        hubToken = getLoginToken(urlToken,credenciales, authToken);
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", hubToken);
@@ -139,7 +141,7 @@ public class ApiHooks {
         String url = "https://xxxxxxxxxxx/api/dev/report/list?search=";
         String baseUrl = url + idreporte;
 
-        hubToken = getHubToken(urlToken,credenciales, authToken);
+        hubToken = getLoginToken(urlToken,credenciales, authToken);
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", hubToken);
@@ -164,7 +166,7 @@ public class ApiHooks {
         id = searchReporte(idReporte);
         req = baseUrl + id + "/remove";
 
-        hubToken = getHubToken(urlToken,credenciales, authToken);
+        hubToken = getLoginToken(urlToken,credenciales, authToken);
 
         RequestSpecification request = RestAssured.given();
         request.header("Authorization", hubToken);

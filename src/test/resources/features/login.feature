@@ -39,5 +39,18 @@ Feature: Login en la pagina NopCommerce
 
 
   @api
-  Scenario: Test de prueba API
-    Given placeholder test API
+  Scenario: Login de Usuario Cliente ENDPOINT
+    When Ejecuto el endpoint de login con un usuario cliente
+    Then Valido que el login es exitoso
+
+  @api
+  @superadmin
+  Scenario: Login de Usuario SuperAdmin ENDPOINT
+    When Ejecuto el endpoint de login con un usuario superadmin
+    Then Valido que el login es exitoso
+
+  @api 
+  @security
+  Scenario: Validar que un usuario cliente no pueda obtener información exclusiva de superadmin
+    When Ejecuto la request de obtención de información de superadmin con token de cliente
+    Then Valido que el sistema deniegue el acceso por falta de permisos
