@@ -3,7 +3,6 @@ package pom.login;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pom.baseUrl.UrlConstant;
-import steps.ApiHooks;
 import steps.Hooks;
 import static org.junit.Assert.*;
 
@@ -17,10 +16,9 @@ import io.restassured.specification.RequestSpecification;
 
 public class LoginLogic extends Hooks {
     public static int statusFlag = 0;
-    public static String authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3N2M0ZmIyMC1hNjcwLTRiNWUtODJlZi04Zjg4ZGFjOTg5MWUiLCJyb2xlIjoiQ1VTVE9NRVIiLCJlbWFpbCI6Impvc2VAdGVzdGluZy5jb20iLCJuYW1lIjoiam96ZSBxd2VydHkiLCJpYXQiOjE3ODEyMTU4MTcsImV4cCI6MTc4MTIxOTQxN30.AfRYOKJ1yPSFot75-obw12DWIhrJ8ABC-krDb3a4faU";
+    public static String authorization = "";
 
     LoginPage loginPage = new LoginPage();
-    ApiHooks apiHooks = new ApiHooks();
     private static final Logger log = LogManager.getLogger(LoginLogic.class);
 
     public void navegoPaginaWeb() {
@@ -119,7 +117,7 @@ public class LoginLogic extends Hooks {
 
 
 
-    public void endpointLogin() {
+public void endpointLogin() {
         String step = "Ejecutando request para login de usuario cliente";
         log.info(step);
         
