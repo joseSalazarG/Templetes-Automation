@@ -17,6 +17,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Log4j2
 public class Hooks {
 
@@ -38,6 +41,7 @@ public class Hooks {
 	@Before
 	public static void initializeDriver() {
 		try {
+			Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
 			WebDriverManager.chromedriver().clearResolutionCache();
 			WebDriverManager.chromedriver().clearDriverCache();
 			WebDriverManager.chromedriver().setup();

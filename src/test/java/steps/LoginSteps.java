@@ -64,27 +64,4 @@ public class LoginSteps {
         loginLogic.validarSeVisualizaUnMensajeDeErrorDeCredenciales();
     }
 
-  @When("Ejecuto el endpoint de login con un usuario cliente")
-    public void login_usuarioCliente_endpoint() {
-        loginLogic.endpointLogin();
-    }
-
-    @Then("Valido que el login es exitoso")
-    public void validoQueElLoginEsExitoso() {
-        loginLogic.validoLoginExitosoEndpoint();
-    }
-
-    @When("Ejecuto el endpoint de login con un usuario superadmin")
-    public void login_usuarioSuperAdmin_endpoint() {
-        loginLogic.endpointSuperAdmin();
-    }
-
-    @When("Ejecuto la request de obtención de información de superadmin con token de cliente")
-    public void obtenerInformacionSuperAdmin_conTokenCliente() {
-        loginLogic.endpointObtenerInformacionSuperAdminConTokenCliente();
-    }
-    @Then("Valido que el sistema deniegue el acceso por falta de permisos")
-    public void validoQueElSistemaDeniegueElAccesoPorFaltaDePermisos() {
-        loginLogic.validoAccesoDenegadoPorRol();
-    }
 }

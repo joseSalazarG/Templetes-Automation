@@ -59,12 +59,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v147</artifactId>
-            <version>${selenium.version}</version>
+            <version>4.29.0</version>
         </dependency>
 
         <!-- JUnit Platform y Jupiter -->
