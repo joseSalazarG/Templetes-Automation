@@ -33,4 +33,45 @@ public class ApiSteps {
     public void elSistemaMuestraElListadoCompletoDeLosMedicosDelPersonalActivo() {
         apiLogic.validoListadoMedicosActivos();
     }
+
+    @When("Registro un nuevo medico con datos válidos")
+    public void registroUnNuevoMedicoConDatosValidos() {
+        apiLogic.endpointRegistrarMedico();
+    }
+
+    @Then("El sistema confirma que el registro del medico fue exitoso")
+    public void elSistemaConfirmaQueElRegistroDelMedicoFueExitoso() {
+        apiLogic.validoRegistroMedicoExitoso();
+    }
+
+    @When("Actualizo la especialidad del médico seleccionado")
+    public void actualizoLaEspecialidadDelMedicoSeleccionado() {
+        apiLogic.endpointActualizarMedicoParcial();
+    }
+
+    @Then("El sistema confirma que la actualización del médico fue exitosa")
+    public void elSistemaConfirmaQueLaActualizacionDelMedicoFueExitosa() {
+        apiLogic.validoActualizacionMedicaExitosa();
+    }
+
+    @When("Solicito el borrado lógico del médico seleccionado")
+    public void solicitoElBorradoLogicoDelMedicoSeleccionado() {
+        apiLogic.endpointEliminarMedico();
+    }
+
+    @Then("El sistema confirma que el médico fue eliminado exitosamente")
+    public void elSistemaConfirmaQueElMedicoFueEliminadoExitosamente() {
+        apiLogic.validoEliminacionMedicaExitosa();
+    }
+
+    @When("Solicito la generación de un código de descuento para el médico seleccionado")
+    public void solicitoLaGeneracionDeUnCodigoDeDescuentoParaElMedicoSeleccionado() {
+        apiLogic.endpointGenerarDescuentoMedico();
+    }
+
+    @Then("El sistema confirma que el código de descuento fue generado exitosamente")
+    public void elSistemaConfirmaQueElCodigoDeDescuentoFueGeneradoExitosamente() {
+        apiLogic.validoGeneracionDescuentoExitosa();
+    }
+    
 }
