@@ -46,7 +46,7 @@ public class ApiSteps {
 
     @When("Actualizo la especialidad del médico seleccionado")
     public void actualizoLaEspecialidadDelMedicoSeleccionado() {
-        apiLogic.endpointActualizarMedicoParcial();
+        apiLogic.endpointActualizarMedico();
     }
 
     @Then("El sistema confirma que la actualización del médico fue exitosa")

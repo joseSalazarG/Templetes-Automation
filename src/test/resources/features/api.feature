@@ -24,7 +24,7 @@ Feature: Requests al backend del Ecommerce
     Then El sistema confirma que el registro del medico fue exitoso
 
 @actualizar @doctors
-  Scenario: Actualizar parcialmente la especialidad de un médico específico
+  Scenario: Actualizar la especialidad de un médico específico
     Given Un administrador autenticado en el panel de gestión
     When Actualizo la especialidad del médico seleccionado
     Then El sistema confirma que la actualización del médico fue exitosa
