@@ -17,9 +17,11 @@ public class apiLogic {
     // Variables compartidas para las pruebas de API
     public static int statusFlag = 0;
     public static String authorization = "";
+    public static String comandaId = "";
     
     // Variables globales para almacenar las respuestas HTTP de los escenarios
     private Response responseMedicos;
+    private Response responseComanda;
     private static final Logger log = LogManager.getLogger(apiLogic.class);
 
     // FUNCIONES PARA LA AUTOMATIZACION DE PRUEBAS DE LOS ENDPOINTS
@@ -122,5 +124,89 @@ public class apiLogic {
 
         // Validacion interna para asegurar el exito del test
         org.junit.Assert.assertEquals("El código de estado no fue 200", 200, statusCode);
+    }
+
+    public void procesarOrdenMedica() {
+        String step = "Ejecutando request para procesar una orden médica";
+        log.info(step);
+
+        RequestSpecification request = RestAssured.given();
+        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
+        request.contentType(ContentType.JSON);
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("order_type", "pre_order");
+        requestBody.put("origin", "medication_tracker");
+        requestBody.put("recipe_id", "REC-001");
+        requestBody.put("doctor_info", "Dr. Juan Pérez - MPPS 12345");
+        requestBody.put("patient_info", "Paciente: María López - CI: 12345678");
+
+        java.util.List<Map<String, Object>> itemsList = new java.util.ArrayList<>();
+        Map<String, Object> item = new HashMap<>();
+        item.put("sku", "MED-001");
+        item.put("quantity", 2);
+        item.put("presentation", "tabletas");
+        itemsList.add(item);
+
+        requestBody.put("items", itemsList);
+        requestBody.put("priority", "normal");
+
+        requestBody.put("idempotency_key", "a1b2c3d4e5f6");
+
+        request.body(requestBody);
+
+        responseComanda = request.post("/comanda/");
+        statusFlag = responseComanda.getStatusCode();
+    }
+
+    public void validarCreacionComanda() {
+        String step = "Validando que la comanda se haya creado de forma exitosa";
+        log.info(step);
+
+        int statusCode = responseComanda.getStatusCode();
+
+        if (statusCode == 200) {
+            log.info("La comanda fue procesada con éxito. Código de estado: " + statusCode);
+
+            apiLogic.comandaId = responseComanda.jsonPath().getString("comanda_id");
+            log.info("ID de Comanda registrado para seguimiento: " + apiLogic.comandaId);
+
+            String statusResponse = responseComanda.jsonPath().getString("status");
+            org.junit.Assert.assertEquals("El estado en el body no es 'success'", "success", statusResponse);
+
+        } else {
+            log.error("Error al procesar la comanda. Código de estado: " + statusCode);
+            log.error("Respuesta del servidor: " + responseComanda.getBody().asString());
+        }
+
+        org.junit.Assert.assertEquals("El código de estado esperado no es 200", 200, statusCode);
+    }
+
+    public void consultarEstadoComanda() {
+        String step = "Ejecutando request para consultar el estado de la comanda";
+        log.info(step);
+
+        RequestSpecification request = RestAssured.given();
+        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
+        request.contentType(ContentType.JSON);
+
+        responseComanda = request.get("/comanda/" + apiLogic.comandaId + "/status");
+
+        statusFlag = responseComanda.getStatusCode();
+    }
+
+    public void validarCodigoRespuesta(int statusCodeEsperado) {
+        String step = "Validando código de respuesta HTTP esperado: " + statusCodeEsperado;
+        log.info(step);
+
+        if (statusFlag == statusCodeEsperado) {
+            log.info("Validación exitosa. Código de estado recibido: " + statusFlag);
+            log.info("Body recibido: " + responseComanda.getBody().asString());
+        } else {
+            log.error("Validación fallida. Se esperaba " + statusCodeEsperado + " pero se recibió: " + statusFlag);
+            log.error("Respuesta del servidor: " + responseComanda.getBody().asString());
+        }
+
+        org.junit.Assert.assertEquals("El código de estado de la respuesta no es el esperado", statusCodeEsperado, statusFlag);
     }
 }
