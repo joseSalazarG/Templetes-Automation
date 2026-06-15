@@ -15,7 +15,7 @@ Feature: Requests al backend del Ecommerce
   Scenario: Listar todos los médicos activos
     Given las credenciales de un administrador
     When solicito la lista de todos los médicos activos
-    Then 
+    Then valido ver unicamente a los médicos activos
 
 @registro @doctors
   Scenario: Registrar un nuevo medico exitosamente
