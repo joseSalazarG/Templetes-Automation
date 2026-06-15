@@ -9,59 +9,59 @@ public class ApiSteps {
     
     apiLogic apiLogic = new apiLogic();
 
-  @When("Ejecuto el endpoint de login con un usuario cliente")
-    public void login_usuarioCliente_endpoint() {
-        apiLogic.endpointLoginUsuario();
+  @Given("las credenciales de un usuario cliente")
+    public void CredencialesUsuarioCliente() {
+        apiLogic.credencialesUsuarioCliente();
     }
 
-    @Then("Valido que el login es exitoso")
-    public void validoQueElLoginEsExitoso() {
-        apiLogic.validoLoginExitosoEndpoint();
+    @Then("valido autenticarme exitosamente")
+    public void validoAuntenticarmeExitosamente() {
+        apiLogic.validoAuntenticarmeExitosamente();
     }
 
-    @Given("Un administrador autenticado en el panel de gestión")
-    public void unAdministradorAutenticadoEnElPanelDeGestion() {
-        apiLogic.endpointLoginAdmin(); 
+    @Given("las credenciales de un administrador")
+    public void CredencialesAdministrador() {
+        apiLogic.credencialesSuperAdmin(); 
     }
 
-    @When("Solicito la lista de todos los médicos registrados")
-    public void solicitoLaListaDeTodosLosMedicosRegistrados() {
-        apiLogic.endpointListarMedicos();
+    @When("solicito la lista de todos los médicos activos")
+    public void solicitarListaMedicosActivos() {
+        apiLogic.solicitarListaMedicosActivos();
     }
 
-    @Then("El sistema muestra el listado completo de los médicos del personal activo")
-    public void elSistemaMuestraElListadoCompletoDeLosMedicosDelPersonalActivo() {
-        apiLogic.validoListadoMedicosActivos();
+    @Then("valido ver unicamente a los médicos activos")
+    public void validoVerUnicamenteMedicosActivos() {
+        apiLogic.validoVerUnicamenteMedicosActivos();
     }
 
-    @When("Registro un nuevo medico con datos válidos")
-    public void registroUnNuevoMedicoConDatosValidos() {
-        apiLogic.endpointRegistrarMedico();
+    @When("solicito el registro de un nuevo medico con datos validos")
+    public void solicitoRegistrarNuevoMedicoConDatosValidos() {
+        apiLogic.solicitoRegistrarNuevoMedicoConDatosValidos();
     }
 
-    @Then("El sistema confirma que el registro del medico fue exitoso")
-    public void elSistemaConfirmaQueElRegistroDelMedicoFueExitoso() {
-        apiLogic.validoRegistroMedicoExitoso();
+    @Then("valido registrar un nuevo medico desde la API exitosamente")
+    public void validoRegistrarNuevoMedicoAPIExitosamente() {
+        apiLogic.validoRegistrarNuevoMedicoAPIExitosamente();
     }
 
-    @When("Actualizo la especialidad del médico seleccionado")
-    public void actualizoLaEspecialidadDelMedicoSeleccionado() {
-        apiLogic.endpointActualizarMedico();
+    @When("actualizo la especialidad del médico seleccionado")
+    public void actualizarEspecialidadMedicoSeleccionado() {
+        apiLogic.actualizarEspecialidadMedicoSeleccionado();
     }
 
-    @Then("El sistema confirma que la actualización del médico fue exitosa")
-    public void elSistemaConfirmaQueLaActualizacionDelMedicoFueExitosa() {
-        apiLogic.validoActualizacionMedicaExitosa();
+    @Then("valido que la actualización del médico fue exitosa")
+    public void validarActualizacionMedicoExitosa() {
+        apiLogic.validarActualizacionMedicoExitosa();
     }
 
-    @When("Solicito el borrado lógico del médico seleccionado")
-    public void solicitoElBorradoLogicoDelMedicoSeleccionado() {
-        apiLogic.endpointEliminarMedico();
+    @When("solicito el borrado lógico del médico seleccionado")
+    public void solicitoElBorradoLogicoMedicoSeleccionado() {
+        apiLogic.solicitoElBorradoLogicoMedicoSeleccionado();
     }
 
-    @Then("El sistema confirma que el médico fue eliminado exitosamente")
-    public void elSistemaConfirmaQueElMedicoFueEliminadoExitosamente() {
-        apiLogic.validoEliminacionMedicaExitosa();
+    @Then("valido que el medico fue desactivado correctamente")
+    public void validoDesactivarMedico() {
+        apiLogic.validoDesactivarMedico();
     }
 
     @When("Solicito la generación de un código de descuento para el médico seleccionado")
