@@ -19,7 +19,7 @@ Feature: Requests al backend del Ecommerce
     When Proceso una orden medica
     Then Valido se creó una comanda exitosamente
 
-@api @comandas
+@comandas @comanda
   Scenario: Comprobar el estado de una comanda registrada
-    When Consulto el estado de una comanda
+    When Consulto el estado de una comanda "ec81aea8-4957-4a86-8465-3e37ec27842e"
     Then Valido recibir un codigo de respuesta 200

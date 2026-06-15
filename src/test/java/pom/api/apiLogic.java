@@ -182,18 +182,17 @@ public class apiLogic {
         org.junit.Assert.assertEquals("El código de estado esperado no es 200", 200, statusCode);
     }
 
-    public void consultarEstadoComanda() {
-        String step = "Ejecutando request para consultar el estado de la comanda";
+    public void consultarEstadoComanda(String idComanda) {
+        String step = "Ejecutando request para consultar el estado de la comanda: " + idComanda;
         log.info(step);
 
         RequestSpecification request = RestAssured.given();
         request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
         request.contentType(ContentType.JSON);
 
-        responseComanda = request.get("/comanda/" + apiLogic.comandaId + "/status");
-
+        responseComanda = request.get("/comanda/" + idComanda + "/status"); 
         statusFlag = responseComanda.getStatusCode();
-    }
+    }  
 
     public void validarCodigoRespuesta(int statusCodeEsperado) {
         String step = "Validando código de respuesta HTTP esperado: " + statusCodeEsperado;
@@ -202,11 +201,12 @@ public class apiLogic {
         if (statusFlag == statusCodeEsperado) {
             log.info("Validación exitosa. Código de estado recibido: " + statusFlag);
             log.info("Body recibido: " + responseComanda.getBody().asString());
-        } else {
-            log.error("Validación fallida. Se esperaba " + statusCodeEsperado + " pero se recibió: " + statusFlag);
-            log.error("Respuesta del servidor: " + responseComanda.getBody().asString());
-        }
+    } else {
 
-        org.junit.Assert.assertEquals("El código de estado de la respuesta no es el esperado", statusCodeEsperado, statusFlag);
+        log.error("Validación fallida. Se esperaba " + statusCodeEsperado + " pero se recibió: " + statusFlag);
+        log.error("Respuesta del servidor: " + responseComanda.getBody().asString());
+    }
+
+    org.junit.Assert.assertEquals("El código de estado de la respuesta no es el esperado", statusCodeEsperado, statusFlag);
     }
 }

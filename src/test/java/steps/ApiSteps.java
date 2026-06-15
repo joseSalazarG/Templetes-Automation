@@ -44,13 +44,13 @@ public class ApiSteps {
         apiLogic.validarCreacionComanda();
     }
 
-    @When("Consulto el estado de una comanda")
-    public void Consulto_el_estado_of_una_comanda() {
-        apiLogic.consultarEstadoComanda();
+    @When("Consulto el estado de una comanda {string}")
+    public void consulto_el_estado_de_una_comanda(String idComanda) {
+        apiLogic.consultarEstadoComanda(idComanda);
     }
 
     @Then("Valido recibir un codigo de respuesta 200")
-    public void Valido_recibir_un_codigo_de_respuesta_200() {
+    public void valido_recibir_un_codigo_de_respuesta() {
         apiLogic.validarCodigoRespuesta(200);
     }
 }
