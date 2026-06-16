@@ -9,28 +9,48 @@ public class ApiSteps {
     
     apiLogic apiLogic = new apiLogic();
 
-  @When("Ejecuto el endpoint de login con un usuario cliente")
-    public void login_usuarioCliente_endpoint() {
-        apiLogic.endpointLoginUsuario();
+    @Given("las credenciales de un usuario cliente")
+    public void CredencialesUsuarioCliente() {
+        apiLogic.credencialesUsuarioCliente();
     }
 
-    @Then("Valido que el login es exitoso")
-    public void validoQueElLoginEsExitoso() {
-        apiLogic.validoLoginExitosoEndpoint();
+    @Then("valido autenticarme exitosamente")
+    public void validoAuntenticarmeExitosamente() {
+        apiLogic.validoAuntenticarmeExitosamente();
     }
 
-    @Given("Un administrador autenticado en el panel de gestión")
-    public void unAdministradorAutenticadoEnElPanelDeGestion() {
-        apiLogic.endpointLoginAdmin(); 
+    @Given("las credenciales de un administrador")
+    public void CredencialesAdministrador() {
+        apiLogic.credencialesSuperAdmin(); 
     }
 
-    @When("Solicito la lista de todos los médicos registrados")
-    public void solicitoLaListaDeTodosLosMedicosRegistrados() {
-        apiLogic.endpointListarMedicos();
+    @When("solicito la lista de todos los médicos activos")
+    public void solicitarListaMedicosActivos() {
+        apiLogic.solicitarListaMedicosActivos();
     }
 
-    @Then("El sistema muestra el listado completo de los médicos del personal activo")
-    public void elSistemaMuestraElListadoCompletoDeLosMedicosDelPersonalActivo() {
-        apiLogic.validoListadoMedicosActivos();
+    @Then("valido ver unicamente a los médicos activos")
+    public void validoVerUnicamenteMedicosActivos() {
+        apiLogic.validoVerUnicamenteMedicosActivos();
+    }
+
+    @When("Proceso una orden medica")
+    public void proceso_una_orden_medica() {
+        apiLogic.procesarOrdenMedica();
+    }
+
+    @Then("Valido se creó una comanda exitosamente")
+    public void Valido_se_creo_una_comanda_exitosamente() {
+        apiLogic.validarCreacionComanda();
+    }
+
+    @When("Consulto el estado de una comanda {string}")
+    public void consulto_el_estado_de_una_comanda(String idComanda) {
+        apiLogic.consultarEstadoComanda(idComanda);
+    }
+
+    @Then("Valido recibir un codigo de respuesta 200")
+    public void valido_recibir_un_codigo_de_respuesta() {
+        apiLogic.validarCodigoRespuesta(200);
     }
 }
