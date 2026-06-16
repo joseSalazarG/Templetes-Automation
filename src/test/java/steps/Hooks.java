@@ -293,7 +293,7 @@ public class Hooks {
 		}
 
 		wait.until(webDriver -> {
-			String srcValue = element.getAttribute("src");
+			String srcValue = element.getDomAttribute("src");
 			return srcValue != null && !srcValue.contains(initialSrcFragment) && (srcValue.contains(finalFormat1) || srcValue.contains(finalFormat2));
 		});
 	}
@@ -687,7 +687,7 @@ public class Hooks {
 		validateLocator(locator);
 
 		try {
-			return findClickableElement(locator).getAttribute(attribute);
+			return findClickableElement(locator).getDomAttribute(attribute);
 		} catch (NoSuchElementException e) {
 			throw new NoSuchElementException("Elemento no encontrado: " + locator);
 		}
@@ -833,7 +833,7 @@ public class Hooks {
 			List<String> chainList = new ArrayList<>();
 
 			for (WebElement e : list) {
-				chainList.add(e.getAttribute("value"));
+				chainList.add(e.getDomAttribute("value"));
 			}
 			return chainList;
 		} catch (NoSuchElementException e) {

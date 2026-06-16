@@ -6,18 +6,7 @@ import pom.baseUrl.UrlConstant;
 import steps.Hooks;
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-
 public class LoginLogic extends Hooks {
-    public static int statusFlag = 0;
-    public static String authorization = "";
-    private Response responseMedicos;
 
     LoginPage loginPage = new LoginPage();
     private static final Logger log = LogManager.getLogger(LoginLogic.class);
@@ -36,7 +25,7 @@ public class LoginLogic extends Hooks {
         clickElement(loginPage.getBtnLogin());
     }
 
-    public void ingresoElUsuarioYLaContrasena(String usuario, String password) {
+    public void ingresarUsuarioYContrasena(String usuario, String password) {
         String step = "Ingreso el usuario " + usuario + " y la contraseña " + password;
         log.info(step);
 
@@ -45,14 +34,14 @@ public class LoginLogic extends Hooks {
         clickElement(loginPage.getBtnSubmit());
     }
 
-    public void validoLoginExitoso() {
+    public void validarLoginExitoso() {
         String step = "Valido que me logueo de forma exitosa";
         log.info(step);
 
         assertTrue("No se visualiza el botón de cerrar sesión", elementIsDisplayed(loginPage.getBtnLogOut()));
     }
 
-    public void hagoClickEnElBotonDeLogin() {
+    public void hacerClickEnBotonLogin() {
         String step = "Hago click en el boton de login";
         log.info(step);
 
@@ -66,7 +55,7 @@ public class LoginLogic extends Hooks {
         captureCookies();
     }
 
-    public void cargar_cookies() {
+    public void cargarCookies() {
         String step = "Cargo las cookies de la sesion";
         log.info(step);
 
@@ -74,35 +63,35 @@ public class LoginLogic extends Hooks {
         refreshPage();
     }
 
-    public void hagoClickEnElBotonDeCerrarSesion() {
+    public void hacerClickEnBotonCerrarSesion() {
         String step = "Hago click en el boton de cerrar sesion";
         log.info(step);
 
         clickElement(loginPage.getBtnLogOut());
     }
 
-    public void validoCierreSesionExitoso() {
+    public void validarCierreSesionExitoso() {
         String step = "Valido que cierro sesion de forma exitosa";
         log.info(step);
 
         assertTrue("No se visualiza el botón de login", elementIsDisplayed(loginPage.getBtnLogin()));
     }
 
-    public void hagoClickEnElCarrito() {
+    public void hacerClickEnCarrito() {
         String step = "Hago click en el carrito";
         log.info(step);
 
         clickElement(loginPage.getBtnCarrito());
     }
 
-    public void validoElCarritoEstaVacio() {
+    public void validarCarritoEstaVacio() {
         String step = "Valido que el carrito esta vacio";
         log.info(step);
 
         assertTrue("No se encuentra el mensaje 'Carrito vacio'", elementIsDisplayed(loginPage.getLbCarritoVacio()));
     }
 
-    public void validarSeVisualizaUnMensajeDeErrorDeCredenciales() {
+    public void validarVisualizarMensajeDeErrorDeCredenciales() {
         String step = "Valido que se visualiza un mensaje de error de credenciales";
         log.info(step);
 
@@ -110,131 +99,7 @@ public class LoginLogic extends Hooks {
     }
 
 
-
-// FUNCIONES PARA LA AUTOMATIZACION DE PRUEBAS DE LOS ENDPOINTS
-
-    public void endpointLoginUsuario() {
-        String step = "Ejecutando request para login de usuario cliente";
-        log.info(step);
-        
-        RequestSpecification request = RestAssured.given();
-        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
-        request.contentType(ContentType.JSON);
-        Map<String, String> jsonCredenciales = new HashMap<>();
-        jsonCredenciales.put("email", "jose@testing.com");
-        jsonCredenciales.put("password", "perencejo");
-        request.body(jsonCredenciales);
-
-        Response response = request.post("/auth/login");
-        int statusCode = response.getStatusCode();
-        String dataString = null;
-
-        if (statusCode == 200) {
-            log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
-            String token = response.jsonPath().getString("access_token");
-            LoginLogic.authorization = "Bearer " + token;
-            log.info("Token recibido: " + token);
-        }  else {
-            log.error("La solicitud fallo. Codigo de estado: " + statusCode);
-            dataString = response.getBody().asString();
-            log.error("Respuesta del servidor: " + dataString);
-        }
-        statusFlag = statusCode;
-    }
-
-    public void validoLoginExitosoEndpoint() {
-        String step = "Valido que el login es exitoso";
-        log.info(step);
-
-        assertEquals("El código de estado no es 200", 200, statusFlag);
-    }
-
-    public void endpointLoginAdmin() {
-        String step = "Ejecutando request para login de usuario administrador";
-        log.info(step);
-        
-        RequestSpecification request = RestAssured.given();
-        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
-        request.contentType(ContentType.JSON);
-        Map<String, String> jsonCredenciales = new HashMap<>();
-        jsonCredenciales.put("email", "soyadmin@admin.com");
-        jsonCredenciales.put("password", "perencejo");
-        request.body(jsonCredenciales);
-        Response response = request.post("/auth/login");
-        int statusCode = response.getStatusCode();
-        String dataString = null;
-
-        if (statusCode == 200) {
-            log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
-            String token = response.jsonPath().getString("access_token");
-            LoginLogic.authorization = "Bearer " + token;
-            log.info("Token recibido: " + token);
-        }  else {
-            log.error("La solicitud falló. Código de estado: " + statusCode);
-            dataString = response.getBody().asString();
-            log.error("Respuesta del servidor: " + dataString);
-        }
-        statusFlag = statusCode;
-    }
-
-    public void endpointListarMedicos() {
-        String step = "Ejecutando request para listar médicos activos (Super-Admin)";
-        log.info(step);
-        
-        RequestSpecification request = RestAssured.given();
-        request.baseUri("https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net");
-        request.contentType(ContentType.JSON);
-        
-        // Usamos el token que se guardo en la variable estática durante el login
-        request.header("Authorization", LoginLogic.authorization); 
-
-        // Guardamos el resultado en la variable global
-        responseMedicos = request.get("/api/v1/admin/doctors/");
-    }
-
-    public void validoListadoMedicosActivos() {
-        String step = "Validando que el sistema muestre el listado de médicos activos";
-        log.info(step);
-
-        int statusCode = responseMedicos.getStatusCode();
-
-        if (statusCode == 200) {
-            log.info("La solicitud fue exitosa. Código de estado: " + statusCode);
-            String dataString = responseMedicos.getBody().asString();
-            log.info("Lista de médicos recibida: " + dataString);
-        } else {
-            log.error("La solicitud fallo. Código de estado: " + statusCode);
-            log.error("Respuesta del servidor: " + responseMedicos.getBody().asString());
-        }
-
-        // Validacion interna para asegurar el exito del test
-        org.junit.Assert.assertEquals("El código de estado no fue 200", 200, statusCode);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
+/*
     public void validoMensajeError(String mensaje) {
         String step = "Valido ver el mensaje de error " + mensaje;
         log.info(step);

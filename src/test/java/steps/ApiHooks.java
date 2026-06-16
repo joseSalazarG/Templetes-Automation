@@ -43,6 +43,7 @@ public class ApiHooks {
         }
         return cachedToken;
     }
+    
     /**
      * Busca la ultima solicitud en la aplicación segun la id del usuario  y devuelve su identificador.
      * @param user el numero de id del usuario.

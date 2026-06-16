@@ -15,8 +15,6 @@ import io.restassured.specification.RequestSpecification;
 public class apiLogic {
 
     // Variables compartidas para las pruebas de API
-    public static String comandaId = "";
-    // Variables globales para almacenar las respuestas HTTP de los escenarios
     private static final Logger log = LogManager.getLogger(apiLogic.class);
     public static int statusFlag = 0;
     public static String authorization = ""; // ESTO DEBE IR VACIO PARA QUE SE ASIGNE EL TOKEN CORRECTAMENTE
@@ -25,12 +23,12 @@ public class apiLogic {
     // Constantes de prueba
     public static final String DOCTOR_ID_PRUEBA = "552946a9-1735-44b8-812e-27631c5eb5af"; // AQUI SE PEGA LA ID
     public static final String NUEVA_ESPECIALIDAD_PRUEBA = "Cardiología Pediátrica";
-    private static final String BASE_URL = "https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net";
+    private static final String API_URL = "https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net";
 
     // FUNCIONES PARA LA AUTOMATIZACION DE PRUEBAS DE LOS ENDPOINTS
     private RequestSpecification baseRequest() {
         RequestSpecification request = RestAssured.given()
-                .baseUri(BASE_URL)
+                .baseUri(API_URL)
                 .contentType(ContentType.JSON);
         
         if (!authorization.isEmpty()) {
@@ -140,7 +138,6 @@ public class apiLogic {
         int statusCode = response.getStatusCode();
 
         if (statusCode == 200) {
-            apiLogic.comandaId = response.jsonPath().getString("comanda_id");
             String statusResponse = response.jsonPath().getString("status");
             assertEquals("El estado en el body no es 'success'", "success", statusResponse);
         }

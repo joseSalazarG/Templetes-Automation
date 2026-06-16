@@ -12,7 +12,7 @@
     <!-- Verifica compatibilidad -->
     <properties>
         <cucumber.filter.tags>@All</cucumber.filter.tags> <!-- tag por defecto si no especificado uno -->
-        <selenium.version>4.43.0</selenium.version> <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <selenium.version>4.44.0</selenium.version> <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <junit.version>5.14.2</junit.version> <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <junit.platform.version>1.14.2</junit.platform.version>
         <cucumber.version>7.34.2</cucumber.version> <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.29.0</version>
+            <version>${selenium.version}</version>
         </dependency>
 
         <!-- JUnit Platform y Jupiter -->
@@ -196,7 +196,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Copia metadatos de Allure al directorio de resultados -->
+            <!-- Esto copia metadatos de Allure al directorio de resultados -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
