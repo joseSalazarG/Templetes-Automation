@@ -3,16 +3,16 @@
 @All
 Feature: Requests al backend del Ecommerce
 
-@admin
+@api
   Scenario: Login de Usuario Cliente ENDPOINT
-    When Ejecuto el endpoint de login con un usuario cliente
-    Then Valido que el login es exitoso
+    Given las credenciales de un usuario cliente
+    Then valido autenticarme exitosamente
 
 @admin @doctors
   Scenario: Listar todos los médicos activos
-    Given Un administrador autenticado en el panel de gestión
-    When Solicito la lista de todos los médicos registrados
-    Then El sistema muestra el listado completo de los médicos del personal activo
+    Given las credenciales de un administrador
+    When solicito la lista de todos los médicos activos
+    Then valido ver unicamente a los médicos activos
 
 @api @carrito
   Scenario: Crear un carrito
