@@ -21,8 +21,8 @@ Feature: Requests al backend del Ecommerce
   Scenario: Registrar un nuevo medico exitosamente
     Given las credenciales de un administrador
     When solicito el registro de un nuevo medico con datos validos
-    #TODO: implementar una busqueda del nuevo medico registrado para validar que efectivamente se registro
-    Then valido registrar un nuevo medico desde la API exitosamente
+    When busco el nuevo medico registrado en el listado de medicos activos
+    Then valido que el medico registrado se encuentre en el listado
 
 @actualizar @doctors
   Scenario: Actualizar la especialidad de un médico específico

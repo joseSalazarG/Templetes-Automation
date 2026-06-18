@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.restassured.RestAssured;
@@ -18,10 +19,13 @@ public class apiLogic {
     public static int statusFlag = 0;
     public static String authorization = ""; // ESTO DEBE IR VACIO PARA QUE SE ASIGNE EL TOKEN CORRECTAMENTE
     private Response response;
+    private String nuevoMedicoEmail;
     Map<String, String> jsonBody = new HashMap<>();
     // Constantes de prueba
     public static final String DOCTOR_ID_PRUEBA = "552946a9-1735-44b8-812e-27631c5eb5af"; // AQUI SE PEGA LA ID
     public static final String NUEVA_ESPECIALIDAD_PRUEBA = "Cardiología Pediátrica";
+    private static final String[] ESPECIALIDADES = {"Cardiología Pediátrica", "Neurología Adultos"};
+    private String especialidadAnterior;
     private static final String BASE_URL = "https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net";
 
     private RequestSpecification baseRequest() {
@@ -94,15 +98,12 @@ public class apiLogic {
     }
 
     public void validoVerUnicamenteMedicosActivos() {
-        String step = "Valido ver unicamente a los medicos activos";
-        log.info(step);
+        log.info("Valido ver unicamente a los medicos activos");
+        assertEquals(200, response.getStatusCode());
 
-        int statusCode = response.getStatusCode();
-
-        //TODO: en vez de validar solo el codigo de estado, valida que la lista solo tenga médicos activos 
-        //TODO: no se, iterala, recorrela o como sea
-
-        assertEquals("El código de estado no fue 200", 200, statusCode);
+        for (Map<String, Object> d : response.jsonPath().getList(""))
+            assertTrue("El medico " + d.get("correo") + " no esta activo",
+                       Boolean.TRUE.equals(d.get("activo")));
     }
 
     // REGISTRAR
@@ -114,12 +115,20 @@ public class apiLogic {
         Map<String, String> jsonMedico = new HashMap<>();
         jsonMedico.put("nombres", "Gobert");
         jsonMedico.put("apellidos", "González");
-        jsonMedico.put("correo", "gobert@example.com");
+        jsonMedico.put("correo", "gobert1@example.com");
         jsonMedico.put("telefono", "+584142345679");
         jsonMedico.put("numero_colegiatura", "67890");
         jsonMedico.put("especialidad", "Pediatría2");
 
         response = baseRequest().body(jsonMedico).post("/api/v1/admin/doctors/");
+
+        if (response.getStatusCode() == 201) {
+            nuevoMedicoEmail = response.jsonPath().getString("correo");
+            if (nuevoMedicoEmail == null) {
+                nuevoMedicoEmail = "gobert1@example.com";
+            }
+            log.info("Médico registrado con email: {}", nuevoMedicoEmail);
+        }
     }
 
     public void validoRegistrarNuevoMedicoAPIExitosamente() {
@@ -131,31 +140,66 @@ public class apiLogic {
         assertTrue("El código de estado no fue el esperado "+statusCode, statusCode == 201);
     }
 
+    private Response listResponse;
+
+    public void buscarNuevoMedicoEnListadoActivos() {
+        String step = "Busco el nuevo médico registrado en el listado de médicos activos";
+        log.info(step);
+
+        listResponse = baseRequest().get("/api/v1/admin/doctors/");
+    }
+
+    public void validoMedicoRegistradoEnListado() {
+        String step = "Valido que el médico registrado se encuentre en el listado";
+        log.info(step);
+
+        int statusCodeRegistro = response.getStatusCode();
+        assertEquals("El código de estado del registro no fue 201", 201, statusCodeRegistro);
+
+        int statusCodeLista = listResponse.getStatusCode();
+        assertEquals("El código de estado del listado no fue 200", 200, statusCodeLista);
+
+        List<Map<String, Object>> doctores = listResponse.jsonPath().getList("");
+
+        boolean encontrado = false;
+        for (Map<String, Object> doctor : doctores) {
+            String correo = (String) doctor.get("correo");
+            if (nuevoMedicoEmail.equals(correo)) {
+                encontrado = true;
+                log.info("Médico encontrado en el listado: {}", doctor);
+                break;
+            }
+        }
+
+        assertTrue("El médico con email " + nuevoMedicoEmail + " no fue encontrado en el listado de médicos activos", encontrado);
+    }
+
     // ACTUALIZAR ESPECIALIDAD
 
     public void actualizarEspecialidadMedicoSeleccionado() {
-        String step = "Actualizo la especialidad del médico seleccionado";  
-        log.info(step);
+        log.info("Actualizo la especialidad del médico seleccionado");
 
-        //TODO: consulta primero los datos actuales del medico
-        //TODO: puedes tener que si una lista de dos o tres especialidades para alternar entre ellas en cada ejecución
-        
+        especialidadAnterior = baseRequest()
+                .get("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA)
+                .jsonPath().getString("especialidad");
+
         jsonBody.clear();
-        jsonBody.put("especialidad", NUEVA_ESPECIALIDAD_PRUEBA);
-        baseRequest().body(jsonBody);
+        jsonBody.put("especialidad",
+                ESPECIALIDADES[0].equals(especialidadAnterior) ? ESPECIALIDADES[1] : ESPECIALIDADES[0]);
 
-        response = baseRequest().patch("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA);
+        response = baseRequest().body(jsonBody).patch("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA);
     }
 
     public void validarActualizacionMedicoExitosa() {
-        String step = "Valido que la actualización del médico fue exitosa";
-        log.info(step);
+        log.info("Valido que la actualización del médico fue exitosa");
+        assertEquals(200, response.getStatusCode());
 
-        int statusCode = response.getStatusCode();
-        //TODO: en vez de validar solo el código de estado, valida que la especialidad efectivamente se haya modificado
-        //TODO: haciendo una comprobacion de antes y despues 
+        String especialidadActual = baseRequest()
+                .get("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA)
+                .jsonPath().getString("especialidad");
 
-        assertEquals("El código de estado no fue el esperado", 200, statusCode);
+        assertNotNull("Especialidad no debe ser nula", especialidadActual);
+        assertNotEquals("La especialidad no se actualizó", especialidadAnterior, especialidadActual);
     }
 
     // ELIMINAR

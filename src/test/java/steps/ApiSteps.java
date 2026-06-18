@@ -44,6 +44,16 @@ public class ApiSteps {
         apiLogic.validoRegistrarNuevoMedicoAPIExitosamente();
     }
 
+    @When("busco el nuevo medico registrado en el listado de medicos activos")
+    public void buscarNuevoMedicoRegistradoEnListado() {
+        apiLogic.buscarNuevoMedicoEnListadoActivos();
+    }
+
+    @Then("valido que el medico registrado se encuentre en el listado")
+    public void validoMedicoRegistradoEnListado() {
+        apiLogic.validoMedicoRegistradoEnListado();
+    }
+
     @When("actualizo la especialidad del médico seleccionado")
     public void actualizarEspecialidadMedicoSeleccionado() {
         apiLogic.actualizarEspecialidadMedicoSeleccionado();
