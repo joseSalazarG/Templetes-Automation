@@ -43,3 +43,13 @@ Feature: Requests al backend del Ecommerce
     Given las credenciales de un administrador
     When Solicito la generación de un código de descuento para el médico seleccionado
     Then El sistema confirma que el código de descuento fue generado exitosamente
+
+@api @carrito
+  Scenario: Crear un carrito
+    When Proceso una orden medica
+    Then Valido se creó una comanda exitosamente
+
+@comandas @comanda
+  Scenario: Comprobar el estado de una comanda registrada
+    When Consulto el estado de una comanda "ec81aea8-4957-4a86-8465-3e37ec27842e"
+    Then Valido recibir un codigo de respuesta 200

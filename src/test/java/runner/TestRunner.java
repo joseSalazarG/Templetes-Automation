@@ -36,4 +36,4 @@ public class TestRunner {
 
     2)  Crear un html: allure generate target/allure-results -o target/allure-report --clean
         Abre el reporte con: allure open target/allure-report
-*/    
+*/
