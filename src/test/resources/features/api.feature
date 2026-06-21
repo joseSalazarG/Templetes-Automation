@@ -21,7 +21,7 @@ Feature: Requests al backend del Ecommerce
   Scenario: Registrar un nuevo medico exitosamente
     Given las credenciales de un administrador
     When solicito el registro de un nuevo medico con datos validos
-    When busco el nuevo medico registrado en el listado de medicos activos
+    And solicito el listado de medicos activos
     Then valido que el medico registrado se encuentre en el listado
 
 @actualizar @doctors

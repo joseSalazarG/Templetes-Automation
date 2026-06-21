@@ -2,6 +2,7 @@ package steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import pom.api.apiLogic;
 
@@ -59,14 +60,9 @@ public class ApiSteps {
         apiLogic.solicitoRegistrarNuevoMedicoConDatosValidos();
     }
 
-    @Then("valido registrar un nuevo medico desde la API exitosamente")
-    public void validoRegistrarNuevoMedicoAPIExitosamente() {
-        apiLogic.validoRegistrarNuevoMedicoAPIExitosamente();
-    }
-
-    @When("busco el nuevo medico registrado en el listado de medicos activos")
-    public void buscarNuevoMedicoRegistradoEnListado() {
-        apiLogic.buscarNuevoMedicoEnListadoActivos();
+    @And("solicito el listado de medicos activos")
+    public void solicitarListadoMedicosActivos() {
+        apiLogic.solicitarListadoMedicosActivos();
     }
 
     @Then("valido que el medico registrado se encuentre en el listado")
