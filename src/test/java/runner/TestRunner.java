@@ -13,7 +13,11 @@ import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 @ConfigurationParameter(key = "cucumber.plugin", value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm,pretty")
 @ConfigurationParameter(key = "cucumber.monochrome", value = "true")
 @ConfigurationParameter(key = "cucumber.snippets", value = "CAMELCASE")
+<<<<<<< HEAD
 @ConfigurationParameter(key = "cucumber.filter.tags", value = "@comanda") // AQUI
+=======
+@ConfigurationParameter(key = "cucumber.filter.tags", value = "@actualizar") // AQUI
+>>>>>>> request_superAdmin
 
 public class TestRunner {
     
@@ -36,4 +40,4 @@ public class TestRunner {
 
     2)  Crear un html: allure generate target/allure-results -o target/allure-report --clean
         Abre el reporte con: allure open target/allure-report
-*/    
+*/

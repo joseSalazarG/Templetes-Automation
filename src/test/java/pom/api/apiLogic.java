@@ -3,8 +3,10 @@ package pom.api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static org.junit.Assert.*;
-
+import java.time.Instant;
+import java.time.Duration;  
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.restassured.RestAssured;
@@ -21,14 +23,14 @@ public class apiLogic {
     private Response response;
     Map<String, String> jsonBody = new HashMap<>();
     // Constantes de prueba
-    public static final String DOCTOR_ID_PRUEBA = "552946a9-1735-44b8-812e-27631c5eb5af"; // AQUI SE PEGA LA ID
-    public static final String NUEVA_ESPECIALIDAD_PRUEBA = "Cardiología Pediátrica";
-    private static final String API_URL = "https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net";
+    public static final String DOCTOR_ID_PRUEBA = "ed6cb123-a59e-40fd-b537-27487e51c5bf"; // AQUI SE PEGA LA ID
+    private String especialidadAnterior;
+    private static final String BASE_URL = "https://apiecommerce-gdchbuc5dsemf0et.westus3-01.azurewebsites.net";
 
     // FUNCIONES PARA LA AUTOMATIZACION DE PRUEBAS DE LOS ENDPOINTS
     private RequestSpecification baseRequest() {
         RequestSpecification request = RestAssured.given()
-                .baseUri(API_URL)
+                .baseUri(BASE_URL)
                 .contentType(ContentType.JSON);
         
         if (!authorization.isEmpty()) {
@@ -36,7 +38,16 @@ public class apiLogic {
         }
         return request;
     }
-    
+
+    private void checkResponseStatus(String mensajeError, int statusEsperado) {
+        if (response.getStatusCode() != statusEsperado) {
+            throw new RuntimeException(mensajeError + ". Esperado: " + statusEsperado + ". Obtenido: " + response.getStatusCode() + ". Respuesta: " + response.getBody().asString());
+        }
+    }
+
+    // --- ENDPOINTS ---
+
+    // LOGINS
     public void credencialesUsuarioCliente() {
         String step = "Dadas las credenciales de un usuario cliente";
         log.info(step);
@@ -46,14 +57,11 @@ public class apiLogic {
         jsonBody.put("password", "perencejo");
 
         response = baseRequest().body(jsonBody).post("/auth/login");
-        statusFlag = response.getStatusCode();
 
-        if (statusFlag == 200) {
-            String token = response.jsonPath().getString("access_token");
-            authorization = "Bearer " + token; 
-        } else {
-            throw new RuntimeException("Autenticación de cliente falló. Código: " + statusFlag + ". Respuesta: " + response.getBody().asString());
-        }
+        checkResponseStatus("Error en la autenticación del usuario cliente", 200);
+
+        String token = response.jsonPath().getString("access_token");
+        authorization = "Bearer " + token;
     }
 
     public void credencialesSuperAdmin() {
@@ -65,14 +73,11 @@ public class apiLogic {
         jsonBody.put("password", "perencejo");
 
         response = baseRequest().body(jsonBody).post("/auth/login");
-        statusFlag = response.getStatusCode();
 
-        if (statusFlag == 200) {
-            String token = response.jsonPath().getString("access_token");
-            authorization = "Bearer " + token;
-        } else {
-            throw new RuntimeException("Autenticación de super-administrador falló. Código: " + statusFlag + ". Respuesta: " + response.getBody().asString());
-        }
+        checkResponseStatus("Error en la autenticación del usuario cliente", 200);
+        
+        String token = response.jsonPath().getString("access_token");
+        authorization = "Bearer " + token;  
     }
 
     public void validoAuntenticarmeExitosamente() {
@@ -83,23 +88,152 @@ public class apiLogic {
         assertEquals("El código de estado no es 200", 200, statusFlag);
     }
 
+    // LISTA MEDICOS
+
     public void solicitarListaMedicosActivos() {
         String step = "Solicito la lista de todos los médicos activos";
         log.info(step);
         
         response = baseRequest().get("/api/v1/admin/doctors/");
+
+        checkResponseStatus("Error al obtener el listado de médicos activos", 200);
     }
 
     public void validoVerUnicamenteMedicosActivos() {
-        String step = "Valido ver unicamente a los medicos activos";
+        log.info("Valido ver unicamente a los medicos activos");
+
+        List<Map<String, Object>> listaDoctores = response.jsonPath().getList("");
+
+        for (Map<String, Object> doctor : listaDoctores) {
+             // si el estado del doctor no es activo
+            Boolean status = (Boolean) doctor.get("activo");
+            if (status != true) {
+                throw new AssertionError("Se encontró un médico que no está activo en el listado: " + doctor.get("id") + " - " + doctor.get("nombres") + " " + doctor.get("apellidos"));
+            } 
+        }   
+
+        assertTrue(true); // llegado a este punto no se encontraron doctores desactivados
+    }
+
+    // REGISTRAR
+
+    public void solicitoRegistrarNuevoMedicoConDatosValidos() {
+        String step = "Solicito el registro de un nuevo médico con datos válidos";
         log.info(step);
 
+        // para evitarnos datos repetidos calculamos un numero en milisegundos
+        Instant base = Instant.parse("2026-01-01T00:00:00Z");        
+        String hora = String.valueOf(Duration.between(base, Instant.now()).toMillis());
+
+        jsonBody.clear();
+        jsonBody.put("nombres", "Test registro");
+        jsonBody.put("apellidos", "Fabian Laura");
+        jsonBody.put("correo", "gobert_" + hora + "@example.com");
+        jsonBody.put("telefono", "+58" + 1234567890);
+        jsonBody.put("numero_colegiatura", "12345678");
+        jsonBody.put("especialidad", "Pediatría2");
+        response = baseRequest().body(jsonBody).post("/api/v1/admin/doctors/");
+        
+        checkResponseStatus("Error al registrar el nuevo médico", 201);
+        jsonBody.put("fecha_registro", response.jsonPath().getString("fecha_registro"));
+    }
+
+    public void validoMedicoRegistradoEnListado() {
+        String step = "Valido que el medico registrado se encuentre en el listado";
+        log.info(step);
+
+        Map<String, String> registro = new HashMap<>();
+
+        registro.put("nombres", response.jsonPath().getString("nombres"));
+        registro.put("apellidos", response.jsonPath().getString("apellidos"));
+        registro.put("correo", response.jsonPath().getString("correo"));
+        registro.put("telefono", response.jsonPath().getString("telefono"));
+        registro.put("numero_colegiatura", response.jsonPath().getString("numero_colegiatura"));
+        registro.put("especialidad", response.jsonPath().getString("especialidad"));
+        registro.put("fecha_registro", response.jsonPath().getString("fecha_registro"));
+
+        assertEquals("El registro del nuevo médico no coincide con los datos enviados en la solicitud", jsonBody, registro);
+    }
+
+    public void solicitarListadoMedicosActivos() {
+        String step = "Solicito el listado de médicos activos";
+        log.info(step);
+
+        response = baseRequest().get("/api/v1/admin/doctors/");        
+        checkResponseStatus("Error al obtener el listado de médicos activos", 200);
+    }
+
+    // ACTUALIZAR ESPECIALIDAD
+
+    public void actualizarEspecialidadMedicoSeleccionado() {
+        log.info("Actualizo la especialidad del médico seleccionado");
+
+        response = baseRequest().get("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA);
+        checkResponseStatus("Error al obtener la información del médico", 200);
+
+        especialidadAnterior = (String) response.jsonPath().getString("especialidad");
+        jsonBody.clear();
+        // alternamos la especialidad actual por la siguiente en la lista
+        if (especialidadAnterior.equals("Cardiología Pediátrica")) {
+            jsonBody.put("especialidad", "Neurología Adultos");
+        } else {
+            jsonBody.put("especialidad", "Cardiología Pediátrica");
+        }
+        // y mandamos a actualizar la especialidad
+        response = baseRequest().body(jsonBody).patch("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA);
+        checkResponseStatus("Error al actualizar la especialidad del médico", 200);
+    }
+
+    public void validarActualizacionMedicoExitosa() {
+        log.info("Valido que la actualización del médico fue exitosa");
+
+        String especialidadActual = response.jsonPath().getString("especialidad");
+
+        assertNotEquals("La especialidad no se actualizó ", especialidadAnterior, especialidadActual);
+    }
+
+    // ELIMINAR
+
+    public void solicitoElBorradoLogicoMedicoSeleccionado() {
+        String step = "Solicito el borrado lógico del médico seleccionado";
+        log.info(step);
+
+        response = baseRequest().delete("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA);
+    }
+
+    public void validoDesactivarMedico() {
+        String step = "Valido que el medico fue desactivado correctamente";
+        log.info(step);
+        
         int statusCode = response.getStatusCode();
 
-        //TODO: en vez de validar solo el codigo de estado, valida que la lista solo tenga médicos activos 
-        //TODO: no se, iterala, recorrela o como sea
+        assertEquals("El código de estado no fue el esperado.\n" + response.getBody().asString(), 204, statusCode);
+    }
 
-        assertEquals("El código de estado no fue 200", 200, statusCode);
+    // DESCUENTOS
+
+    public void endpointGenerarDescuentoMedico() {
+        String step = "Ejecutando request POST para generar descuento al médico ID: " + DOCTOR_ID_PRUEBA;
+        log.info(step);
+
+        Map<String, Object> jsonDiscount = new HashMap<>();
+        jsonDiscount.put("porcentaje", 15);
+
+        response = baseRequest().body(jsonDiscount).post("/api/v1/admin/doctors/" + DOCTOR_ID_PRUEBA + "/discount");
+    }
+
+    public void validoGeneracionDescuentoExitosa() {
+        String step = "Validando que la generación del código de descuento haya sido exitosa";
+        log.info(step);
+        
+        int statusCode = response.getStatusCode();
+
+        if (statusCode == 200 || statusCode == 201) {
+            log.info("El código de descuento se generó con éxito. Respuesta: " + response.getBody().asString());
+        } else {
+            log.error("Error al generar el descuento. Código: " + statusCode + ". Respuesta: " + response.getBody().asString());
+        }
+        assertEquals("El código de estado no fue el esperado", 201, statusCode);
     }
 
     public void procesarOrdenMedica() {

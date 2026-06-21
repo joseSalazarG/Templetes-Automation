@@ -2,6 +2,7 @@ package steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import pom.api.apiLogic;
 
@@ -53,4 +54,50 @@ public class ApiSteps {
     public void valido_recibir_un_codigo_de_respuesta() {
         apiLogic.validarCodigoRespuesta(200);
     }
+
+    @When("solicito el registro de un nuevo medico con datos validos")
+    public void solicitoRegistrarNuevoMedicoConDatosValidos() {
+        apiLogic.solicitoRegistrarNuevoMedicoConDatosValidos();
+    }
+
+    @And("solicito el listado de medicos activos")
+    public void solicitarListadoMedicosActivos() {
+        apiLogic.solicitarListadoMedicosActivos();
+    }
+
+    @Then("valido que el medico registrado se encuentre en el listado")
+    public void validoMedicoRegistradoEnListado() {
+        apiLogic.validoMedicoRegistradoEnListado();
+    }
+
+    @When("actualizo la especialidad del médico seleccionado")
+    public void actualizarEspecialidadMedicoSeleccionado() {
+        apiLogic.actualizarEspecialidadMedicoSeleccionado();
+    }
+
+    @Then("valido que la actualización del médico fue exitosa")
+    public void validarActualizacionMedicoExitosa() {
+        apiLogic.validarActualizacionMedicoExitosa();
+    }
+
+    @When("solicito el borrado lógico del médico seleccionado")
+    public void solicitoElBorradoLogicoMedicoSeleccionado() {
+        apiLogic.solicitoElBorradoLogicoMedicoSeleccionado();
+    }
+
+    @Then("valido que el medico fue desactivado correctamente")
+    public void validoDesactivarMedico() {
+        apiLogic.validoDesactivarMedico();
+    }
+
+    @When("Solicito la generación de un código de descuento para el médico seleccionado")
+    public void solicitoLaGeneracionDeUnCodigoDeDescuentoParaElMedicoSeleccionado() {
+        apiLogic.endpointGenerarDescuentoMedico();
+    }
+
+    @Then("El sistema confirma que el código de descuento fue generado exitosamente")
+    public void elSistemaConfirmaQueElCodigoDeDescuentoFueGeneradoExitosamente() {
+        apiLogic.validoGeneracionDescuentoExitosa();
+    }
+    
 }
