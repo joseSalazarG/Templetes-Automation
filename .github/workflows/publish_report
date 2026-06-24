@@ -1,0 +1,31 @@
+name: Clonar repositorio externo
+
+# Define los eventos que activarán el workflow
+on:
+  workflow_dispatch: # Para ejecutar el workflow manualmente (no se hacerlo funcionar)
+
+  schedule:
+    - cron: '10 5 * * *' # Ejecuta el workflow todos los días a las 5:10 (UTC)
+
+  push:
+    branches: [ main ] # Para ejecutar el workflow en pushes a la rama allureReport
+
+jobs:
+  clonar_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar rama de otro repositorio
+        uses: actions/checkout@v4
+        with:
+          repository: FarmaHumana-UNEG/qa_commerce
+          ref: Reportes
+          token: {{ secrets.SECRET_TOKEN }}
+
+        # Publica el reporte en la rama testReport
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.SECRET_TOKEN }}
+          publish_branch: Reportes
+          publish_dir: allure-history    
