@@ -14,6 +14,6 @@ jobs:
         run: |
           npx resend-cli emails send \
             --from "onboarding@resend.dev" \
-            --to [${{ secrets.SECRET_DESTINATARIOS }}] \
+            --to ${{ secrets.SECRET_DESTINATARIOS }} \
             --subject "test" \
             --html "<h1>aaaaaaaaaa</h1>"
