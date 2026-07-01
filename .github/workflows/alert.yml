@@ -25,5 +25,5 @@ jobs:
           to: ${{ secrets.SECRET_DESTINATARIOS }}
           from: "GitHub Actions <${{ secrets.SECRET_EMAIL }}>"
           body: |
-            aaaa
+            aaaaa
             Commit message: ${{ github.event.head_commit.message }}
