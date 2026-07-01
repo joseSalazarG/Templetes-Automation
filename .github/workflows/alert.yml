@@ -8,14 +8,12 @@ jobs:
   alert:
     runs-on: ubuntu-latest
     steps:
-        - name: Enviar correo electrónico de alerta
-          uses: case/actions-email@v1
-          env:
-            RESEND_API_KEY: ${{ secrets.SECRET_RESEND_API }} # If using Resend
-            EMAIL_TO: ${{ secrets.SECRET_DESTINATARIOS }}
-            EMAIL_FROM: "josesalazarsg02@gmail.com"
-          with:
-            provider: resend
-            subject: "La rama staging de la aplicación se ha actualizado"
-            body_html: "<h1>No se que mas quieres que te diga</h1>"
-            to: ${{ secrets.SECRET_DESTINATARIOS }}
+      - name: Send email
+        env:
+          RESEND_API_KEY: ${{ secrets.SECRET_RESEND_API }}
+        run: |
+          npx resend-cli emails send \
+            --from "onboarding@resend.dev" \
+            --to "${{ secrets.SECRET_DESTINATARIOS }}" \
+            --subject "test" \
+            --html "<h1>aaaaaaaaaa</h1>"
