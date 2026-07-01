@@ -18,3 +18,4 @@ jobs:
             provider: resend
             subject: "La rama staging de la aplicación se ha actualizado"
             body_html: "<h1>No se que mas quieres que te diga</h1>"
+            to: ${{ secrets.SECRET_DESTINATARIOS }}
