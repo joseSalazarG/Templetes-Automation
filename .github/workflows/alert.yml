@@ -1,0 +1,19 @@
+name: Notifica cuando esta rama se actualice
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Enviar correo electrónico de alerta
+          uses: case/actions-email@v1
+          env:
+            RESEND_API_KEY: ${{ secrets.SECRET_RESEND_API }} # If using Resend
+            EMAIL_TO: ${{ secrets.SECRET_DESTINATARIOS }}
+          with:
+            provider: resend
+            subject: "La rama staging de la aplicación se ha actualizado"
+            body_html: "<h1>No se que mas quieres que te diga</h1>"
