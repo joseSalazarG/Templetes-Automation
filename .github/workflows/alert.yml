@@ -13,7 +13,7 @@ jobs:
           env:
             RESEND_API_KEY: ${{ secrets.SECRET_RESEND_API }} # If using Resend
             EMAIL_TO: ${{ secrets.SECRET_DESTINATARIOS }}
-            EMAIL_FROM: "Git actions"
+            EMAIL_FROM: ${{ secrets.SECRET_FROM }}
           with:
             provider: resend
             subject: "La rama staging de la aplicación se ha actualizado"
