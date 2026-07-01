@@ -16,4 +16,4 @@ jobs:
             --from "onboarding@resend.dev" \
             --to ${{ secrets.SECRET_DESTINATARIOS }} \
             --subject "test" \
-            --html "<h1>aaaaaaaaaa</h1>"
+            --html "<h1>aaaaaaaaa</h1>"
