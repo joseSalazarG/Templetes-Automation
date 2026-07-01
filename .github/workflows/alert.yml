@@ -13,7 +13,7 @@ jobs:
           RESEND_API_KEY: ${{ secrets.SECRET_RESEND_API }}
         run: |
           npx resend-cli emails send \
-            --from "onboarding@resend.dev" \
+            --from "onboarding@farma.com" \
             --to ${{ secrets.SECRET_DESTINATARIOS }} \
             --subject "test" \
             --html "<h1>aaaaaaaaa</h1>"
