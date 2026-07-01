@@ -8,12 +8,22 @@ jobs:
   alert:
     runs-on: ubuntu-latest
     steps:
-      - name: Send email
-        env:
-          RESEND_API_KEY: ${{ secrets.SECRET_RESEND_API }}
-        run: |
-          npx resend-cli emails send \
-            --from "onboarding@farma.com" \
-            --to ${{ secrets.SECRET_DESTINATARIOS }} \
-            --subject "test" \
-            --html "<h1>aaaaaaaaa</h1>"
+      - name: Send Mail
+        uses: dawidd6/action-send-mail@master
+        with:
+          # Required connection settings for Gmail
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          
+          # Authentication from GitHub Secrets
+          username: ${{ secrets.SECRET_EMAIL }}
+          password: ${{ secrets.SECRET_EMAIL_PASSWORD }}
+          
+          # Email Content Configuration
+          subject: "GitHub Action Alert: ${{ github.repository }}"
+          to: ${{ secrets.SECRET_DESTINATARIOS }}
+          from: "GitHub Actions <${{ secrets.SECRET_EMAIL }}>"
+          body: |
+            aaaa
+            Commit message: ${{ github.event.head_commit.message }}
